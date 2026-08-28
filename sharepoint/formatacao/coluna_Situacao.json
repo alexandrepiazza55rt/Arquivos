@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "style": { "display": "flex", "align-items": "center" },
+  "children": [
+    {
+      "elmType": "span",
+      "style": {
+        "padding": "3px 10px",
+        "border-radius": "11px",
+        "font-size": "11px",
+        "font-weight": "700",
+        "white-space": "nowrap",
+        "background-color": "=if(@currentField=='ATRASADO','#FCE9ED',if(@currentField=='BLOQUEADO','#FCE9ED',if(@currentField=='NO PRAZO','#E6F6EE',if(@currentField=='CONCLUÍDO','#E4F2FB',if(@currentField=='ATENÇÃO','#FCF3E0','#F0F2F5')))))",
+        "color": "=if(@currentField=='ATRASADO','#DC2B4B',if(@currentField=='BLOQUEADO','#7C2D3E',if(@currentField=='NO PRAZO','#12A150',if(@currentField=='CONCLUÍDO','#0B84C7',if(@currentField=='ATENÇÃO','#B4780A','#5B6675')))))"
+      },
+      "txtContent": "@currentField"
+    }
+  ]
+}

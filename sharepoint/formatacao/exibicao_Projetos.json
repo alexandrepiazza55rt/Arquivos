@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/row-formatting.schema.json",
+  "hideSelection": false,
+  "additionalRowClass": "=if([$Situacao] == 'ATRASADO', 'sp-field-severity--blocked', if([$Situacao] == 'BLOQUEADO', 'sp-field-severity--severeWarning', if([$Situacao] == 'ATENÇÃO', 'sp-field-severity--warning', '')))"
+}

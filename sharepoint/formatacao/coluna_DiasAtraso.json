@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "span",
+  "style": {
+    "font-weight": "=if(@currentField > 0, '700', '400')",
+    "color": "=if(@currentField > 0, '#DC2B4B', '#97A1AF')"
+  },
+  "txtContent": "=if(@currentField > 0, '+' + toString(@currentField), '—')"
+}

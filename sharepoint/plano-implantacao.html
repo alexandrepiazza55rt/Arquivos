@@ -1,0 +1,463 @@
+<title>Patrimonial no SharePoint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F4F6F9; --surface:#FFFFFF; --raised:#FAFBFC;
+  --ink:#0F1722; --ink2:#4E5A6B; --ink3:#8B95A5;
+  --line:#E3E7EC; --line2:#CFD6DF;
+  --accent:#2F6BFF; --accent-soft:#EAF0FF;
+  --ok:#0E8A47; --ok-soft:#E4F4EB;
+  --warn:#9A6606; --warn-soft:#FBF1DE;
+  --danger:#C42542; --danger-soft:#FBE7EB;
+  --code-bg:#F1F4F8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B0F15; --surface:#131A23; --raised:#182029;
+    --ink:#E9EDF3; --ink2:#A5B0BF; --ink3:#6D7889;
+    --line:#232C38; --line2:#2F3A48;
+    --accent:#7BA0FF; --accent-soft:#18243C;
+    --ok:#4BC07E; --ok-soft:#122A1E;
+    --warn:#D9A441; --warn-soft:#2A2213;
+    --danger:#F0708C; --danger-soft:#2C161C;
+    --code-bg:#0E141C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B0F15; --surface:#131A23; --raised:#182029;
+  --ink:#E9EDF3; --ink2:#A5B0BF; --ink3:#6D7889;
+  --line:#232C38; --line2:#2F3A48;
+  --accent:#7BA0FF; --accent-soft:#18243C;
+  --ok:#4BC07E; --ok-soft:#122A1E;
+  --warn:#D9A441; --warn-soft:#2A2213;
+  --danger:#F0708C; --danger-soft:#2C161C;
+  --code-bg:#0E141C;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Segoe UI","Segoe UI Variable Text",system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1100px; margin:0 auto; padding:60px 28px 110px}
+.col{max-width:68ch}
+
+h1,h2,h3{font-family:"IBM Plex Sans",system-ui,sans-serif; text-wrap:balance; margin:0}
+h1{font-size:clamp(30px,4.2vw,42px); font-weight:600; letter-spacing:-.025em; line-height:1.12}
+h2{font-size:24px; font-weight:600; letter-spacing:-.015em}
+h3{font-size:17px; font-weight:600; letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 14px}
+.lede{font-size:18px; color:var(--ink2); margin-top:18px}
+
+header{border-bottom:1px solid var(--line); padding-bottom:34px; margin-bottom:46px}
+.meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px}
+.tag{font-family:"IBM Plex Mono",monospace; font-size:12px; padding:5px 11px; border-radius:6px; background:var(--surface); border:1px solid var(--line); color:var(--ink2)}
+
+section{margin-bottom:56px}
+.shead{display:flex; align-items:baseline; gap:14px; margin-bottom:8px}
+.snum{font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500; color:var(--ink3); flex:0 0 auto}
+section > p, section > .col > p{margin-bottom:16px}
+.stack{display:flex; flex-direction:column; gap:16px}
+
+code{font-family:"IBM Plex Mono",monospace; font-size:.87em; background:var(--code-bg); border:1px solid var(--line); border-radius:5px; padding:1px 6px; color:var(--ink)}
+pre{background:var(--code-bg); border:1px solid var(--line); border-radius:10px; padding:16px 18px; overflow-x:auto; margin:0}
+pre code{background:none; border:0; padding:0; font-size:13px; line-height:1.6}
+
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table{width:100%; border-collapse:collapse; font-size:14px}
+th{text-align:left; font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:500; letter-spacing:.09em; text-transform:uppercase; color:var(--ink3); padding:13px 16px; border-bottom:1px solid var(--line2); white-space:nowrap; background:var(--raised)}
+td{padding:11px 16px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+td:first-child{color:var(--ink); font-weight:500; white-space:nowrap}
+td code{font-size:12.5px; white-space:nowrap}
+.tipo{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink3); white-space:nowrap}
+
+.pill{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.02em; padding:2px 9px; border-radius:10px; white-space:nowrap}
+.p-ok{background:var(--ok-soft); color:var(--ok)}
+.p-warn{background:var(--warn-soft); color:var(--warn)}
+.p-dan{background:var(--danger-soft); color:var(--danger)}
+.p-acc{background:var(--accent-soft); color:var(--accent)}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:22px 24px}
+.card h3{margin-bottom:6px}
+.card > p{color:var(--ink2); font-size:15px}
+.grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+
+.nota{border-left:3px solid var(--warn); background:var(--warn-soft); border-radius:0 10px 10px 0; padding:16px 20px; color:var(--ink)}
+.nota b{color:var(--warn)}
+.nota.crit{border-left-color:var(--danger); background:var(--danger-soft)}
+.nota.crit b{color:var(--danger)}
+
+ol.passos{list-style:none; counter-reset:p; padding:0; margin:0; display:flex; flex-direction:column; gap:2px}
+ol.passos li{counter-increment:p; display:grid; grid-template-columns:34px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--line)}
+ol.passos li:last-child{border-bottom:0}
+ol.passos li::before{content:counter(p); font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500; color:var(--accent); background:var(--accent-soft); border-radius:7px; width:30px; height:30px; display:grid; place-items:center}
+ol.passos b{display:block; font-weight:600; color:var(--ink)}
+ol.passos span{color:var(--ink2); font-size:15px}
+ul{margin:0; padding-left:20px; color:var(--ink2)}
+li{margin-bottom:7px}
+ul li::marker{color:var(--ink3)}
+strong{color:var(--ink); font-weight:600}
+.dl{display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:14.5px; align-items:baseline}
+.dl dt{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink3); white-space:nowrap}
+.dl dd{margin:0; color:var(--ink2)}
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Plano de implantação</p>
+  <h1>Monitoramento Patrimonial no SharePoint</h1>
+  <p class="lede col">Sete listas, duas automações e o que muda em relação à planilha. Os
+     dados já estão prontos para importar — 78 projetos, 21 itens, 12 notas e 56 registros
+     de histórico, extraídos do arquivo atual.</p>
+  <div class="meta">
+    <span class="tag">7 listas</span>
+    <span class="tag">2 fluxos do Power Automate</span>
+    <span class="tag">303 linhas para migrar</span>
+    <span class="tag">SharePoint_Importacao.xlsx</span>
+    <span class="tag">sem pedido para a TI</span>
+  </div>
+</header>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">01</span><h2>O que muda de verdade</h2></div>
+  <div class="col stack">
+    <p>O ganho é a simultaneidade: cada lançamento vira um item independente, e duas pessoas
+       gravando ao mesmo tempo não geram cópia em conflito. Junto vêm histórico por item e
+       permissão por lista.</p>
+    <p>O custo está no motor de cálculo. Hoje SLA, situação, dias de atraso e conferência
+       saem de fórmulas do Excel. Nem tudo tem equivalente direto.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:22px">
+    <table>
+      <thead><tr><th>Cálculo de hoje</th><th>No SharePoint</th><th>Custo</th></tr></thead>
+      <tbody>
+        <tr><td>Responsável e SLA da etapa<br><span class="tipo">INDEX/MATCH</span></td>
+            <td>Coluna de pesquisa para a lista <code>EtapasSLA</code></td>
+            <td><span class="pill p-ok">DIRETO</span></td></tr>
+        <tr><td>Situação<br><span class="tipo">IF aninhado</span></td>
+            <td>Coluna calculada — só usa colunas do próprio item</td>
+            <td><span class="pill p-ok">DIRETO</span></td></tr>
+        <tr><td>Descrição do objeto de custo<br><span class="tipo">INDEX/MATCH</span></td>
+            <td>Coluna de pesquisa para <code>ObjetosCusto</code></td>
+            <td><span class="pill p-ok">DIRETO</span></td></tr>
+        <tr><td>Dias na etapa · Dias de atraso · Consumo do SLA<br><span class="tipo">DataRef − Início</span></td>
+            <td>Fluxo diário que reescreve o valor em cada projeto ativo</td>
+            <td><span class="pill p-warn">FLUXO A</span></td></tr>
+        <tr><td>Qtd. recebida do item<br><span class="tipo">SUMIFS nas entregas</span></td>
+            <td>Fluxo disparado ao criar, alterar ou excluir uma entrega</td>
+            <td><span class="pill p-warn">FLUXO B</span></td></tr>
+        <tr><td>Conferência com a OC<br><span class="tipo">comparação</span></td>
+            <td>Coluna calculada, depois que a Qtd. recebida existir</td>
+            <td><span class="pill p-ok">DIRETO</span></td></tr>
+        <tr><td>Base dos gráficos<br><span class="tipo">SUMPRODUCT</span></td>
+            <td>Exibições agrupadas resolvem a contagem; gráfico de verdade só com Power BI</td>
+            <td><span class="pill p-dan">PERDA</span></td></tr>
+        <tr><td>Verificações de consistência<br><span class="tipo">aba 10</span></td>
+            <td>Uma exibição filtrada por verificação</td>
+            <td><span class="pill p-ok">DIRETO</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nota crit col" style="margin-top:22px">
+    <b>A armadilha que precisa ser dita antes.</b> Colunas calculadas do SharePoint
+    <strong>não recalculam com o tempo</strong>: um cálculo com <code>HOJE()</code> só é refeito
+    quando alguém edita o item. Num sistema cujo coração é prazo, isso significa que
+    “dias na etapa” ficaria congelado. É por isso que o Fluxo A não é opcional.
+  </div>
+  <div class="nota col" style="margin-top:14px">
+    <b>Segunda armadilha.</b> Colunas calculadas <strong>não conseguem ler colunas de pesquisa</strong>.
+    Por isso <code>SLADias</code> aparece em <code>Projetos</code> como número comum, preenchido
+    pelo fluxo — e não como valor buscado da lista de etapas.
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">02</span><h2>As sete listas</h2></div>
+  <p class="col">Criar nesta ordem: uma lista de pesquisa precisa existir antes da lista
+     que aponta para ela.</p>
+
+  <div class="grid" style="margin-top:24px">
+    <div class="card">
+      <h3>Produtos <span class="pill p-acc">26</span></h3>
+      <p>Catálogo de códigos. Sem dependências.</p>
+      <dl class="dl" style="margin-top:14px">
+        <dt>Título</dt><dd>CodigoProduto</dd>
+        <dt>Texto</dt><dd>Descricao</dd>
+        <dt>Escolha</dt><dd>TipoItem — câmera, licença, software, switch, equipamento, interfone, coletor facial</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>ObjetosCusto <span class="pill p-acc">108</span></h3>
+      <p>Centros de custo. Sem dependências.</p>
+      <dl class="dl" style="margin-top:14px">
+        <dt>Título</dt><dd>CodigoObjeto</dd>
+        <dt>Texto</dt><dd>Descricao</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>EtapasSLA <span class="pill p-acc">12</span></h3>
+      <p>O fluxo do processo e o prazo de cada etapa. Sem dependências.</p>
+      <dl class="dl" style="margin-top:14px">
+        <dt>Título</dt><dd>Etapa</dd>
+        <dt>Texto</dt><dd>ResponsavelPadrao</dd>
+        <dt>Número</dt><dd>SLADias</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h3 style="margin:34px 0 12px">Projetos <span class="pill p-acc">78 itens</span></h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Coluna</th><th>Tipo</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>Chamado</td><td class="tipo">Título</td><td>a chave; aceita texto como <code>N/A01</code></td></tr>
+        <tr><td>NomeProjeto</td><td class="tipo">Texto</td><td></td></tr>
+        <tr><td>Unidade</td><td class="tipo">Escolha</td><td>RND · SNP · MTU · DRD · BLS · LEM · SDL · RVD</td></tr>
+        <tr><td>AreaDemandante</td><td class="tipo">Escolha</td><td>29 valores da aba de cadastros</td></tr>
+        <tr><td>CodObjetoCusto</td><td class="tipo">Pesquisa</td><td>→ ObjetosCusto</td></tr>
+        <tr><td>ResponsavelDemandante</td><td class="tipo">Texto</td><td>pode virar Pessoa depois</td></tr>
+        <tr><td>DataAbertura</td><td class="tipo">Data</td><td></td></tr>
+        <tr><td>EtapaAtual</td><td class="tipo">Pesquisa</td><td>→ EtapasSLA</td></tr>
+        <tr><td>InicioEtapa</td><td class="tipo">Data</td><td>base do cálculo de prazo</td></tr>
+        <tr><td>Status</td><td class="tipo">Escolha</td><td>Não iniciado · Em andamento · Bloqueado · Concluído · Cancelado</td></tr>
+        <tr><td>Bloqueado</td><td class="tipo">Sim/Não</td><td></td></tr>
+        <tr><td>Dificuldade</td><td class="tipo">Escolha</td><td>14 motivos padronizados</td></tr>
+        <tr><td>ProximaAcao</td><td class="tipo">Texto</td><td></td></tr>
+        <tr><td>SLADias</td><td class="tipo">Número</td><td><span class="pill p-warn">FLUXO A</span> copiado de EtapasSLA</td></tr>
+        <tr><td>DiasNaEtapa</td><td class="tipo">Número</td><td><span class="pill p-warn">FLUXO A</span></td></tr>
+        <tr><td>DiasAtraso</td><td class="tipo">Calculada</td><td><code>=MÁXIMO([DiasNaEtapa]-[SLADias];0)</code></td></tr>
+        <tr><td>ConsumoSLA</td><td class="tipo">Calculada</td><td><code>=SE([SLADias]=0;0;[DiasNaEtapa]/[SLADias])</code></td></tr>
+        <tr><td>Situacao</td><td class="tipo">Calculada</td><td>ver a fórmula abaixo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre style="margin-top:16px"><code>=SE([Status]="Concluído";"CONCLUÍDO";
+ SE([Status]="Cancelado";"CANCELADO";
+ SE([Bloqueado]=VERDADEIRO;"BLOQUEADO";
+ SE(ÉERROS([InicioEtapa]);"SEM DATA DE ETAPA";
+ SE([DiasAtraso]&gt;0;"ATRASADO";
+ SE([ConsumoSLA]&gt;=0,9;"EM RISCO";
+ SE([ConsumoSLA]&gt;=0,7;"ATENÇÃO";"NO PRAZO")))))))</code></pre>
+  <p class="col" style="margin-top:10px; font-size:14.5px; color:var(--ink3)">
+    O separador de argumentos segue o idioma do site. Em site em português é ponto e vírgula;
+    em site em inglês, vírgula — e <code>SE</code> vira <code>IF</code>.</p>
+
+  <h3 style="margin:34px 0 12px">Itens <span class="pill p-acc">21 itens</span></h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Coluna</th><th>Tipo</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td>IDItem</td><td class="tipo">Título</td><td>chamado + código, ex.: <code>440641-63489</code></td></tr>
+        <tr><td>Chamado</td><td class="tipo">Pesquisa</td><td>→ Projetos</td></tr>
+        <tr><td>CodigoProduto</td><td class="tipo">Pesquisa</td><td>→ Produtos</td></tr>
+        <tr><td>QtdPrevista</td><td class="tipo">Número</td><td></td></tr>
+        <tr><td>NumRequisicao · NumSC</td><td class="tipo">Texto</td><td>texto, não número: preserva zeros à esquerda</td></tr>
+        <tr><td>QtdRequisitada</td><td class="tipo">Número</td><td></td></tr>
+        <tr><td>DataRequisicao · EnvioSuprimentos</td><td class="tipo">Data</td><td></td></tr>
+        <tr><td>Comprador · Fornecedor</td><td class="tipo">Texto</td><td></td></tr>
+        <tr><td>NumOC</td><td class="tipo">Texto</td><td></td></tr>
+        <tr><td>DataOC · PrevisaoEntrega</td><td class="tipo">Data</td><td></td></tr>
+        <tr><td>QtdComprada · QtdLiberada · QtdInstalada</td><td class="tipo">Número</td><td></td></tr>
+        <tr><td>IPsDisponibilizados · QtdVMS</td><td class="tipo">Número</td><td></td></tr>
+        <tr><td>QtdRecebida</td><td class="tipo">Número</td><td><span class="pill p-warn">FLUXO B</span> soma das entregas</td></tr>
+        <tr><td>SituacaoItem</td><td class="tipo">Calculada</td><td>aguardando SC → aguardando OC → aguardando entrega → recebido → liberado</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid" style="margin-top:26px">
+    <div class="card">
+      <h3>Entregas <span class="pill p-acc">12</span></h3>
+      <p>Uma linha por nota ou remessa. É a lista que mais cresce e onde a simultaneidade importa.</p>
+      <dl class="dl" style="margin-top:14px">
+        <dt>Título</dt><dd>NF</dd>
+        <dt>Pesquisa</dt><dd>IDItem → Itens</dd>
+        <dt>Data</dt><dd>DataRecebimento</dd>
+        <dt>Número</dt><dd>QtdRecebida</dd>
+        <dt>Escolha</dt><dd>UnidadeRecebedora</dd>
+        <dt>Escolha</dt><dd>LocalCustodia</dd>
+        <dt>Escolha</dt><dd>SituacaoFisica — conferido, pendente, avariado, divergente, devolvido</dd>
+        <dt>Texto</dt><dd>Observacao</dd>
+      </dl>
+    </div>
+    <div class="card">
+      <h3>HistoricoEtapas <span class="pill p-acc">56</span></h3>
+      <p>Uma linha por passagem do projeto por uma etapa. Alimenta a linha do tempo e o SLA realizado.</p>
+      <dl class="dl" style="margin-top:14px">
+        <dt>Pesquisa</dt><dd>Chamado → Projetos</dd>
+        <dt>Texto</dt><dd>Etapa</dd>
+        <dt>Data</dt><dd>DataInicio</dd>
+        <dt>Data</dt><dd>DataConclusao — vazio = etapa em curso</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">03</span><h2>Os dois fluxos</h2></div>
+  <p class="col">São o que substitui as fórmulas que a planilha fazia sozinha. Sem eles o
+     sistema mostra número velho.</p>
+
+  <div class="grid" style="margin-top:24px">
+    <div class="card">
+      <h3>Fluxo A — prazos <span class="pill p-warn">DIÁRIO</span></h3>
+      <p style="margin-bottom:14px">Recalcula os dias de cada projeto ativo. Sem ele, “dias na
+         etapa” congela no valor do dia em que o item foi editado.</p>
+      <ul style="font-size:14.5px">
+        <li><strong>Gatilho:</strong> Recorrência, 1 vez por dia, 6h</li>
+        <li><strong>Ação:</strong> Obter itens de <code>Projetos</code>, filtro
+            <code>Status ne 'Concluído' and Status ne 'Cancelado'</code></li>
+        <li><strong>Para cada:</strong> Atualizar item →
+            <code>DiasNaEtapa = div(sub(ticks(utcNow()),ticks(item()?['InicioEtapa'])),864000000000)</code></li>
+        <li><strong>Também:</strong> copiar <code>SLADias</code> da etapa, porque coluna calculada não lê pesquisa</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Fluxo B — recebimento <span class="pill p-warn">POR EVENTO</span></h3>
+      <p style="margin-bottom:14px">Mantém a quantidade recebida do item igual à soma das notas
+         lançadas. É o <code>SUMIFS</code> que o SharePoint não tem.</p>
+      <ul style="font-size:14.5px">
+        <li><strong>Gatilho:</strong> Quando um item for criado ou modificado em <code>Entregas</code></li>
+        <li><strong>Ação:</strong> Obter itens de <code>Entregas</code>, filtro pelo mesmo <code>IDItem</code></li>
+        <li><strong>Ação:</strong> Somar <code>QtdRecebida</code> do resultado</li>
+        <li><strong>Ação:</strong> Atualizar o item em <code>Itens</code> com o total</li>
+        <li><strong>Atenção:</strong> exclusão não dispara este gatilho. Use um segundo fluxo com
+            “Quando um item for excluído”, ou marque como cancelada em vez de excluir</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">04</span><h2>Ordem de montagem</h2></div>
+  <ol class="passos">
+    <li><div><b>Criar Produtos, ObjetosCusto e EtapasSLA</b>
+      <span>Não dependem de nada. Use <em>Nova lista → Do Excel</em> apontando para as abas
+      correspondentes do arquivo de importação.</span></div></li>
+    <li><div><b>Criar Projetos</b>
+      <span>Monte as colunas na mão para escolher os tipos certos — principalmente as de
+      Escolha e as de Pesquisa, que a importação automática transformaria em texto.</span></div></li>
+    <li><div><b>Colar os 78 projetos</b>
+      <span>Abra a lista em <em>Editar em modo de grade</em> e cole o bloco da aba Projetos.
+      Colunas de Escolha e Pesquisa aceitam texto colado quando o valor bate exatamente.</span></div></li>
+    <li><div><b>Criar Itens, Entregas e HistoricoEtapas</b>
+      <span>Nessa ordem: cada uma aponta para a anterior. Cole os dados do mesmo jeito.</span></div></li>
+    <li><div><b>Acrescentar as colunas calculadas</b>
+      <span>DiasAtraso, ConsumoSLA, Situacao e SituacaoItem. Só depois que as colunas de origem
+      existirem, senão a fórmula não valida.</span></div></li>
+    <li><div><b>Montar os dois fluxos</b>
+      <span>Rode o Fluxo A manualmente uma vez para preencher os prazos de todos os projetos de
+      uma vez, antes de deixá-lo no agendamento.</span></div></li>
+    <li><div><b>Aplicar a formatação JSON</b>
+      <span>Nas colunas Situacao, ConsumoSLA e DiasAtraso. É o que tira a cara de planilha:
+      badges coloridos e barra de prazo em vez de texto cru.</span></div></li>
+    <li><div><b>Criar as exibições</b>
+      <span>Atrasados · Por unidade (agrupada) · Bloqueados · A conferir · Divergências.
+      Cada exibição substitui uma tela do sistema antigo.</span></div></li>
+    <li><div><b>Indexar antes de crescer</b>
+      <span>Crie índice em Unidade, Status e Chamado. Passando de 5.000 itens, exibição sem
+      coluna indexada no filtro para de abrir.</span></div></li>
+  </ol>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">05</span><h2>Montar a página do painel</h2></div>
+  <div class="col stack">
+    <p>Como você já pode criar páginas no site, o painel vira uma página do próprio SharePoint,
+       composta de web parts. Quem cria página normalmente também cria lista — confirme pelo
+       menu <strong>Novo</strong> do site; se aparecer “Lista”, está tudo liberado.</p>
+    <p>A página é montada com peças prontas. Não dá para colar HTML ou JavaScript próprio:
+       script personalizado vem bloqueado por padrão, e é justamente por isso que a formatação
+       JSON das colunas carrega o peso visual.</p>
+  </div>
+
+  <div class="tablewrap" style="margin-top:24px">
+    <table>
+      <thead><tr><th>Web part</th><th>Para quê no painel</th><th>Como configurar</th></tr></thead>
+      <tbody>
+        <tr><td>Lista</td>
+            <td>Cada bloco de tabela do sistema antigo</td>
+            <td>Incorpora <em>uma exibição</em> da lista. A formatação JSON vem junto. Use uma por
+                assunto: atrasados, a conferir, divergências.</td></tr>
+        <tr><td>Gráfico rápido</td>
+            <td>Situação da carteira, projetos por etapa</td>
+            <td>Aceita puxar os dados de uma lista do próprio site. Barras ou rosca.</td></tr>
+        <tr><td>Texto</td>
+            <td>Títulos de seção e as notas de leitura</td>
+            <td>Divide a página nos mesmos blocos do painel de hoje.</td></tr>
+        <tr><td>Links rápidos</td>
+            <td>Atalhos para lançar nota, abrir chamado, ver cadastros</td>
+            <td>Faz o papel do menu lateral: leva direto ao formulário de nova entrada da lista.</td></tr>
+        <tr><td>Divisor · Espaçador</td>
+            <td>Respiro entre as seções</td>
+            <td>Sem eles a página fica com cara de formulário empilhado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="nota col" style="margin-top:22px">
+    <b>Não existe web part de cartão de indicador.</b> Aqueles cinco números grandes do topo do
+    painel não têm equivalente direto. O mais próximo é uma <strong>exibição agrupada</strong>:
+    agrupando por Situação, o SharePoint mostra a contagem ao lado de cada grupo. Não é o cartão,
+    mas entrega o número sem manutenção manual.
+  </div>
+
+  <h3 style="margin:30px 0 12px">As exibições que valem criar</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Exibição</th><th>Lista</th><th>Filtro</th></tr></thead>
+      <tbody>
+        <tr><td>Carteira ativa</td><td>Projetos</td><td><code>Status</code> diferente de Concluído e Cancelado, agrupada por Unidade</td></tr>
+        <tr><td>Atrasados</td><td>Projetos</td><td><code>DiasAtraso</code> maior que 0, ordenada decrescente</td></tr>
+        <tr><td>Bloqueados</td><td>Projetos</td><td><code>Bloqueado</code> é Sim</td></tr>
+        <tr><td>Por etapa</td><td>Projetos</td><td>ativa, agrupada por <code>EtapaAtual</code></td></tr>
+        <tr><td>A conferir</td><td>Entregas</td><td><code>SituacaoFisica</code> diferente de Conferido</td></tr>
+        <tr><td>Aguardando entrega</td><td>Itens</td><td><code>QtdRecebida</code> menor que <code>QtdComprada</code></td></tr>
+        <tr><td>Últimos lançamentos</td><td>Entregas</td><td>ordenada por <code>DataRecebimento</code> decrescente, 20 itens</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="col" style="margin-top:14px; font-size:14.5px; color:var(--ink3)">
+    Cada exibição dessas substitui uma tela do sistema em VBA. Juntas, numa página só, é o painel.</p>
+</section>
+
+<!-- ─────────────────────────────────────────────────── -->
+<section>
+  <div class="shead"><span class="snum">06</span><h2>O que fazer com o que já existe</h2></div>
+  <div class="col stack">
+    <p>Nada do que foi construído vira lixo, mas convém decidir o papel de cada peça antes de
+       migrar, para não manter dois sistemas vivos ao mesmo tempo.</p>
+  </div>
+  <div class="grid" style="margin-top:22px">
+    <div class="card">
+      <h3>A planilha com macro</h3>
+      <p>Aposentar depois que as listas estiverem no ar. Manter congelada como arquivo de
+         consulta do período anterior — não como sistema em uso.</p>
+    </div>
+    <div class="card">
+      <h3>O leitor HTML</h3>
+      <p>Continua servindo enquanto a migração não termina. Depois, só voltaria a fazer sentido
+         lendo as listas, o que exigiria autenticação.</p>
+    </div>
+    <div class="card">
+      <h3>As regras de negócio</h3>
+      <p>São o ativo real. SLA por etapa, o fluxo das 12 etapas, os motivos de bloqueio e a
+         auditoria quantitativa atravessam a mudança inteiros.</p>
+    </div>
+  </div>
+</section>
+
+</div>
