@@ -1,0 +1,32 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "style": { "display": "flex", "align-items": "center", "gap": "10px" },
+  "children": [
+    {
+      "elmType": "div",
+      "style": { "width": "88px", "height": "6px", "border-radius": "3px", "background-color": "#EDEFF3", "flex": "0 0 88px" },
+      "children": [
+        {
+          "elmType": "div",
+          "style": {
+            "height": "6px",
+            "border-radius": "3px",
+            "width": "=if([$SLADias] <= 0, '0%', if([$DiasNaEtapa] >= [$SLADias], '100%', toString(([$DiasNaEtapa] * 100) / [$SLADias]) + '%'))",
+            "background-color": "=if([$SLADias] <= 0, '#CFD6DF', if([$DiasNaEtapa] * 10 >= [$SLADias] * 9, '#C42542', if([$DiasNaEtapa] * 10 >= [$SLADias] * 7, '#9A6606', '#0E8A47')))"
+          }
+        }
+      ]
+    },
+    {
+      "elmType": "span",
+      "style": {
+        "font-size": "12px",
+        "white-space": "nowrap",
+        "font-weight": "=if([$SLADias] > 0 && [$DiasNaEtapa] > [$SLADias], '700', '400')",
+        "color": "=if([$SLADias] <= 0, '#8B95A5', if([$DiasNaEtapa] > [$SLADias], '#C42542', '#4E5A6B'))"
+      },
+      "txtContent": "=if([$SLADias] <= 0, '—', toString([$DiasNaEtapa]) + ' / ' + toString([$SLADias]))"
+    }
+  ]
+}

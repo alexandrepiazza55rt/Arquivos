@@ -2,8 +2,12 @@
  COLUNAS A CRIAR EM  MP_Projetos
 ===========================================================================
 
-Crie nesta ordem. As calculadas usam as duas primeiras, então elas têm que
-existir antes.
+QUATRO colunas, nesta ordem. As calculadas usam as duas primeiras, então
+elas têm que existir antes.
+
+A barra de consumo do SLA não é coluna: o JSON coluna_PrazoDaEtapa.json faz
+a conta sozinho a partir de DiasNaEtapa e SLADias, e vai aplicado na coluna
+DiasNaEtapa. Uma coluna e uma fórmula a menos para criar.
 
 Onde criar:  na lista, botão "+ Adicionar coluna" à direita das colunas.
 
@@ -35,19 +39,7 @@ Onde criar:  na lista, botão "+ Adicionar coluna" à direita das colunas.
 
 
 ---------------------------------------------------------------------------
- 4)  ConsumoSLA                                       tipo: Calculada
----------------------------------------------------------------------------
-     Tipo de retorno: Número, 2 casas decimais
-
-     Em português:
-=SE([SLADias]>0;[DiasNaEtapa]/[SLADias];0)
-
-     Em inglês:
-=IF([SLADias]>0,[DiasNaEtapa]/[SLADias],0)
-
-
----------------------------------------------------------------------------
- 5)  Situacao                                         tipo: Calculada
+ 4)  Situacao                                         tipo: Calculada
 ---------------------------------------------------------------------------
      Tipo de retorno: Linha única de texto
 
@@ -88,7 +80,6 @@ POR QUE NÃO TEM 0,9 NA FÓRMULA
 Como SLADias e DiasNaEtapa ainda estão vazias, os números vêm assim:
 
      DiasAtraso    0 em todos
-     ConsumoSLA    0 em todos
      Situacao      CONCLUÍDO nos 24 concluídos
                    SEM SLA nos outros 54
 
