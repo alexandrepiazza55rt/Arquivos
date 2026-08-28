@@ -108,6 +108,7 @@ Public Sub DesenharTelaInicial()
     hit.Fill.Transparency = 1
     hit.Line.Visible = msoFalse
     hit.Shadow.Visible = msoFalse
+    hit.Placement = xlFreeFloating
     hit.OnAction = "IniciarSistema"
 
     HomeLbl ws, cx + 276, cy + 236, cw - 324, 48, _
@@ -169,6 +170,7 @@ Private Function HomeRect(ws As Worksheet, ByVal l As Double, ByVal t As Double,
     s.Fill.ForeColor.RGB = fillClr
     s.Line.Visible = msoFalse
     s.Shadow.Visible = msoFalse
+    s.Placement = xlFreeFloating
     s.TextFrame2.TextRange.Text = ""
     Set HomeRect = s
 End Function
@@ -191,6 +193,7 @@ Private Sub HomeLbl(ws As Worksheet, ByVal l As Double, ByVal t As Double, ByVal
     s.Fill.Visible = msoFalse
     s.Line.Visible = msoFalse
     s.Shadow.Visible = msoFalse
+    s.Placement = xlFreeFloating
     With s.TextFrame2
         .MarginLeft = 0: .MarginRight = 0: .MarginTop = 0: .MarginBottom = 0
         .VerticalAnchor = msoAnchorMiddle

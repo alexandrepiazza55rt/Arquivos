@@ -28,8 +28,8 @@ Public Const HEAD_H        As Double = 38
 ' Precisam ser Property Get, e nao Const: o VBA so aceita expressao literal em
 ' Const, e ChrW e uma chamada de funcao.
 Public Property Get IC_PAINEL()     As String: IC_PAINEL = ChrW(&HE80F): End Property   ' casa
-Public Property Get IC_PROJETOS()   As String: IC_PROJETOS = ChrW(&HE8A5): End Property   ' documento
-Public Property Get IC_ITENS()      As String: IC_ITENS = ChrW(&HE8EF): End Property   ' caixa / itens
+Public Property Get IC_PROJETOS()   As String: IC_PROJETOS = ChrW(&HE7C3): End Property   ' documento
+Public Property Get IC_ITENS()      As String: IC_ITENS = ChrW(&HE71D): End Property   ' caixa / itens
 Public Property Get IC_COMPRAS()    As String: IC_COMPRAS = ChrW(&HE7BF): End Property   ' carrinho
 Public Property Get IC_NOTAS()      As String: IC_NOTAS = ChrW(&HE8EC): End Property   ' nota / entrega
 Public Property Get IC_CONFER()     As String: IC_CONFER = ChrW(&HE73E): End Property   ' check

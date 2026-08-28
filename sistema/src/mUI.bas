@@ -107,6 +107,10 @@ Public Function Rect(ws As Worksheet, ByVal l As Double, ByVal t As Double, _
         .TextFrame2.TextRange.Text = ""
         .TextFrame2.WordWrap = msoFalse
         .TextFrame2.AutoSize = msoAutoSizeNone
+        ' Sem isto o Excel move e estica a forma quando a largura das colunas e
+        ' a altura das linhas mudam — e a grade da tabela e montada depois do
+        ' menu e dos cartoes. Toda forma do sistema tem posicao absoluta.
+        .Placement = xlFreeFloating
     End With
     Set Rect = s
 End Function

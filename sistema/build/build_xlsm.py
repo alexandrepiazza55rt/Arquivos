@@ -145,7 +145,25 @@ def build_vbaproject(modules):
 
 
 # ─── empacotamento ───────────────────────────────────────────────────────────
+def conferir_placement():
+    """Toda forma criada tem de virar xlFreeFloating: sem isso o Excel a estica
+    quando a largura das colunas muda, e o layout desmonta."""
+    import glob as _g
+    faltando = []
+    for caminho in _g.glob(os.path.join(SRC, '*.bas')):
+        linhas = open(caminho, encoding='utf-8').read().split('\n')
+        for i, l in enumerate(linhas):
+            if 'AddShape' not in l:
+                continue
+            janela = '\n'.join(linhas[i:i + 30])
+            if 'Placement' not in janela:
+                faltando.append('%s:%d' % (os.path.basename(caminho), i + 1))
+    if faltando:
+        raise SystemExit('AddShape sem Placement em: ' + ', '.join(faltando))
+
+
 def montar():
+    conferir_placement()
     modules = carregar_modulos()
     bin_vba = build_vbaproject(modules)
 
