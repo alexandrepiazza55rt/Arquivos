@@ -1,0 +1,147 @@
+===========================================================================
+ FLUXO A  ·  atualiza os prazos de MP_Projetos
+===========================================================================
+
+É o passo mais difícil da migração inteira. Depois dele, o resto é clique.
+
+O que ele faz: todo dia de manhã percorre os projetos ativos, copia o SLA da
+etapa em que cada um está e recalcula há quantos dias ele está nela.
+
+Sem este fluxo, SLADias e DiasNaEtapa ficam zerados para sempre, e a coluna
+Situacao mostra "SEM SLA" em todos.
+
+
+---------------------------------------------------------------------------
+ ONDE CRIAR
+---------------------------------------------------------------------------
+
+Na lista MP_Projetos:  Integrar > Power Automate > Criar um fluxo
+Ou direto em:          make.powerautomate.com  >  Criar
+
+Escolha:  Fluxo de nuvem agendado
+Nome:     MP - Atualiza prazos
+Repetir:  a cada 1 Dia
+Hora:     06:00
+
+
+---------------------------------------------------------------------------
+ AÇÃO 1  ·  pegar os projetos ativos
+---------------------------------------------------------------------------
+
++ Nova etapa  >  SharePoint  >  Obter itens
+
+     Endereço do site .... Central de Proteção ao Negócio
+     Nome da lista ....... MP_Projetos
+
+     Clique em "Mostrar opções avançadas":
+     Consulta de filtro ... Status ne 'CONCLUÍDO' and Status ne 'CANCELADO'
+
+Renomeie a ação para:  Obter projetos
+(clique nos três pontos da ação > Renomear)
+
+
+---------------------------------------------------------------------------
+ AÇÃO 2  ·  pegar a tabela de etapas
+---------------------------------------------------------------------------
+
++ Nova etapa  >  SharePoint  >  Obter itens
+
+     Nome da lista ....... MP_EtapasSLA
+
+Sem filtro nenhum: são só 12 linhas, pega todas de uma vez.
+
+Renomeie para:  Obter etapas
+
+
+---------------------------------------------------------------------------
+ AÇÃO 3  ·  percorrer projeto por projeto
+---------------------------------------------------------------------------
+
++ Nova etapa  >  Controle  >  Aplicar a cada
+
+     Saída das etapas anteriores:  value   (o da ação "Obter projetos")
+
+Tudo daqui pra baixo vai DENTRO deste bloco.
+
+
+---------------------------------------------------------------------------
+ AÇÃO 3.1  ·  achar o SLA da etapa deste projeto
+---------------------------------------------------------------------------
+
+Dentro do Aplicar a cada:
++ Adicionar uma ação  >  Operações de dados  >  Filtrar matriz
+
+     De ........... value   (o da ação "Obter etapas")
+     Condição ..... na caixa da esquerda, clique em "Expressão" e cole:
+
+item()?['Title']
+
+                    operador:  é igual a
+                    na caixa da direita, escolha o conteúdo dinâmico
+                    EtapaAtual   (de "Obter projetos")
+
+Renomeie para:  Achar etapa
+
+
+---------------------------------------------------------------------------
+ AÇÃO 3.2  ·  gravar os dois números
+---------------------------------------------------------------------------
+
+Ainda dentro do Aplicar a cada:
++ Adicionar uma ação  >  SharePoint  >  Atualizar item
+
+     Nome da lista ... MP_Projetos
+     Id .............. conteúdo dinâmico  ID  (de "Obter projetos")
+
+     >>> ATENÇÃO <<<
+     Title ........... conteúdo dinâmico  Title  (de "Obter projetos")
+
+     O Title é obrigatório. Se você deixar vazio, o fluxo APAGA o número do
+     chamado de todos os 54 projetos. É o erro mais caro deste passo.
+
+     SLADias ......... aba Expressão, cole:
+
+if(empty(body('Achar_etapa')),0,int(first(body('Achar_etapa'))?['SLADias']))
+
+     DiasNaEtapa ..... aba Expressão, cole:
+
+if(empty(item()?['InicioEtapa']),0,div(sub(ticks(utcNow()),ticks(item()?['InicioEtapa'])),864000000000))
+
+     Os outros campos: deixe todos vazios. Campo vazio no "Atualizar item"
+     não apaga o valor que já existe — só o Title é exceção, porque é
+     obrigatório.
+
+
+---------------------------------------------------------------------------
+ TESTAR
+---------------------------------------------------------------------------
+
+Salvar  >  Testar  >  Manualmente  >  Testar  >  Executar fluxo
+
+Leva um ou dois minutos para os 54 projetos. Se der tudo verde, volte para
+MP_Projetos: SLADias e DiasNaEtapa preenchidos, e a coluna Situacao virando
+NO PRAZO, ATENÇÃO, EM RISCO ou ATRASADO sozinha.
+
+
+---------------------------------------------------------------------------
+ SE DER ERRO
+---------------------------------------------------------------------------
+
+"body('Achar_etapa') não reconhecido"
+     O nome dentro do body() tem que ser o nome da ação com underscore no
+     lugar do espaço. Se você não renomeou, ou renomeou diferente, ajuste a
+     expressão para o nome real. Ex.: ação "Filtrar matriz" vira
+     body('Filtrar_matriz').
+
+"Não é possível converter em número"
+     Alguma etapa está sem SLA em MP_EtapasSLA. Confira a lista: a etapa
+     CONSTRUÇÃO CIVIL não tinha SLA na planilha original.
+
+O fluxo roda mas os números continuam zerados
+     Confira se a "Consulta de filtro" da ação 1 está com o acento certo em
+     CONCLUÍDO. Sem acento ele não casa e o filtro deixa tudo de fora.
+
+Sumiu o número do chamado dos projetos
+     Você esqueceu de mapear o Title na ação 3.2. Pare o fluxo. Dá para
+     recuperar: a lista tem controle de versão, e cada item guarda o valor
+     anterior no histórico. Me chame que a gente reverte.
