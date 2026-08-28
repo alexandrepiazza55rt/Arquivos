@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "style": { "display": "flex", "align-items": "center" },
+  "children": [
+    {
+      "elmType": "span",
+      "style": {
+        "padding": "3px 10px",
+        "border-radius": "11px",
+        "font-size": "11px",
+        "font-weight": "700",
+        "white-space": "nowrap",
+        "background-color": "=if(@currentField=='CÂMERA','#EAF0FF',if(@currentField=='LICENÇA','#F3EBFC',if(@currentField=='SOFTWARE','#E4F2FB',if(@currentField=='SWITCH','#E4F4EB',if(@currentField=='EQUIPAMENTO','#FBF1DE','#F0F2F5')))))",
+        "color": "=if(@currentField=='CÂMERA','#2F6BFF',if(@currentField=='LICENÇA','#6D5BD9',if(@currentField=='SOFTWARE','#0B84C7',if(@currentField=='SWITCH','#0E8A47',if(@currentField=='EQUIPAMENTO','#9A6606','#5B6675')))))"
+      },
+      "txtContent": "@currentField"
+    }
+  ]
+}
