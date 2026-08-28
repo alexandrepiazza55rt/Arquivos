@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "style": { "display": "flex", "align-items": "center" },
+  "children": [
+    {
+      "elmType": "span",
+      "style": {
+        "padding": "3px 10px",
+        "border-radius": "11px",
+        "font-size": "11px",
+        "font-weight": "700",
+        "white-space": "nowrap",
+        "background-color": "=if(@currentField=='CONFERIDO','#E4F4EB',if(@currentField=='PENDENTE DE CONFERÊNCIA','#FBF1DE',if(@currentField=='AVARIADO','#FBE7EB',if(@currentField=='DIVERGENTE','#FBE7EB',if(@currentField=='DEVOLVIDO','#E4F2FB','#F0F2F5')))))",
+        "color": "=if(@currentField=='CONFERIDO','#0E8A47',if(@currentField=='PENDENTE DE CONFERÊNCIA','#9A6606',if(@currentField=='AVARIADO','#C42542',if(@currentField=='DIVERGENTE','#C42542',if(@currentField=='DEVOLVIDO','#0B84C7','#5B6675')))))"
+      },
+      "txtContent": "@currentField"
+    }
+  ]
+}
