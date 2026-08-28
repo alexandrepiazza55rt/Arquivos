@@ -1,0 +1,96 @@
+===========================================================================
+ COLUNAS A CRIAR EM  MP_Projetos
+===========================================================================
+
+Crie nesta ordem. As calculadas usam as duas primeiras, então elas têm que
+existir antes.
+
+Onde criar:  na lista, botão "+ Adicionar coluna" à direita das colunas.
+
+
+---------------------------------------------------------------------------
+ 1)  SLADias                                          tipo: Número
+---------------------------------------------------------------------------
+     Casas decimais: 0
+     Deixe vazia. Quem preenche é o Fluxo A, copiando de MP_EtapasSLA.
+
+
+---------------------------------------------------------------------------
+ 2)  DiasNaEtapa                                      tipo: Número
+---------------------------------------------------------------------------
+     Casas decimais: 0
+     Deixe vazia. Quem preenche é o Fluxo A, todo dia.
+
+
+---------------------------------------------------------------------------
+ 3)  DiasAtraso                                       tipo: Calculada
+---------------------------------------------------------------------------
+     Tipo de retorno: Número, 0 casas decimais
+
+     Em português:
+=SE([SLADias]>0;MÁXIMO([DiasNaEtapa]-[SLADias];0);0)
+
+     Em inglês:
+=IF([SLADias]>0,MAX([DiasNaEtapa]-[SLADias],0),0)
+
+
+---------------------------------------------------------------------------
+ 4)  ConsumoSLA                                       tipo: Calculada
+---------------------------------------------------------------------------
+     Tipo de retorno: Número, 2 casas decimais
+
+     Em português:
+=SE([SLADias]>0;[DiasNaEtapa]/[SLADias];0)
+
+     Em inglês:
+=IF([SLADias]>0,[DiasNaEtapa]/[SLADias],0)
+
+
+---------------------------------------------------------------------------
+ 5)  Situacao                                         tipo: Calculada
+---------------------------------------------------------------------------
+     Tipo de retorno: Linha única de texto
+
+     Em português:
+=SE([Status]="CONCLUÍDO";"CONCLUÍDO";SE([Status]="CANCELADO";"CANCELADO";SE([Bloqueado]="Sim";"BLOQUEADO";SE([SLADias]=0;"SEM SLA";SE([DiasNaEtapa]>[SLADias];"ATRASADO";SE([DiasNaEtapa]*10>=[SLADias]*9;"EM RISCO";SE([DiasNaEtapa]*10>=[SLADias]*7;"ATENÇÃO";"NO PRAZO")))))))
+
+     Em inglês:
+=IF([Status]="CONCLUÍDO","CONCLUÍDO",IF([Status]="CANCELADO","CANCELADO",IF([Bloqueado]="Sim","BLOQUEADO",IF([SLADias]=0,"SEM SLA",IF([DiasNaEtapa]>[SLADias],"ATRASADO",IF([DiasNaEtapa]*10>=[SLADias]*9,"EM RISCO",IF([DiasNaEtapa]*10>=[SLADias]*7,"ATENÇÃO","NO PRAZO")))))))
+
+
+===========================================================================
+ SE DER "A fórmula contém erro de sintaxe"
+===========================================================================
+
+DUAS LÍNGUAS
+     O SharePoint aceita SE ou IF conforme o idioma do site, e ninguém
+     descobre qual sem tentar. Comece pela versão em português. Se recusar,
+     cole a inglesa. Uma das duas vai passar.
+
+SEPARADOR DE ARGUMENTOS
+     A versão em português usa ponto e vírgula. A inglesa usa vírgula.
+     Se você misturar, dá erro.
+
+NOME DE COLUNA
+     [SLADias] precisa bater exatamente com o nome que você deu à coluna,
+     acento e maiúscula inclusive.
+
+POR QUE NÃO TEM 0,9 NA FÓRMULA
+     Escrevi *10>=*9 em vez de >=0,9 de propósito: assim a fórmula não
+     depende de o site usar vírgula ou ponto como separador decimal. Um
+     problema a menos para descobrir na tentativa e erro.
+
+
+===========================================================================
+ O QUE ESPERAR QUANDO TERMINAR
+===========================================================================
+
+Como SLADias e DiasNaEtapa ainda estão vazias, os números vêm assim:
+
+     DiasAtraso    0 em todos
+     ConsumoSLA    0 em todos
+     Situacao      CONCLUÍDO nos 24 concluídos
+                   SEM SLA nos outros 54
+
+Isso está CERTO nesta etapa. Os atrasados só aparecem depois que o Fluxo A
+rodar e preencher SLADias e DiasNaEtapa. É o passo seguinte.
