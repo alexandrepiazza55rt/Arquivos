@@ -1,0 +1,37 @@
+' ============================================================================
+'  COLE ESTE CODIGO EM  "EstaPasta_de_trabalho" / "ThisWorkbook"
+'  (Alt+F11  ->  duplo clique em EstaPasta_de_trabalho  ->  colar  ->  salvar)
+' ============================================================================
+Option Explicit
+
+Private Sub Workbook_Open()
+    On Error Resume Next
+    IniciarSistema
+End Sub
+
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    On Error Resume Next
+    If SistemaAtivo Then PrepararParaSalvar
+End Sub
+
+Private Sub Workbook_AfterSave(ByVal Success As Boolean)
+    On Error Resume Next
+    If SistemaAtivo Then Recarregar
+End Sub
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    On Error Resume Next
+    If SistemaAtivo Then PrepararParaSalvar
+    RestaurarEstadoExcel
+End Sub
+
+' Ao alternar para outra pasta de trabalho, devolve a faixa de opcoes do Excel.
+Private Sub Workbook_Deactivate()
+    On Error Resume Next
+    If SistemaAtivo Then RestaurarEstadoExcel
+End Sub
+
+Private Sub Workbook_Activate()
+    On Error Resume Next
+    If SistemaAtivo Then Recarregar
+End Sub
