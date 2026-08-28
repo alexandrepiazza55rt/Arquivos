@@ -346,26 +346,26 @@ Public Sub ProjetoFormRender(ByVal chamado As String)
 
     FormBegin x, y, w, 3
 
-    FormField "chamado", "Nº do chamado", IIf(novo, "", SVal(ps.Cells(r, PJ_CHAMADO).Value)), _
+    FormField "chamado", "Nº do chamado", CelTxt(ps, r, PJ_CHAMADO), _
               IIf(novo, "texto", "leitura")
-    FormField "nome", "Nome do projeto", IIf(novo, "", SVal(ps.Cells(r, PJ_NOME).Value)), "texto", , 2
+    FormField "nome", "Nome do projeto", CelTxt(ps, r, PJ_NOME), "texto", , 2
 
-    FormField "unidade", "Unidade", IIf(novo, "", SVal(ps.Cells(r, PJ_UNID).Value)), "lista", ListaUnidades()
-    FormField "area", "Área demandante", IIf(novo, "", SVal(ps.Cells(r, PJ_AREA).Value)), "lista", ListaAreas()
-    FormField "respdem", "Responsável demandante", IIf(novo, "", SVal(ps.Cells(r, PJ_RESPDEM).Value)), "texto"
+    FormField "unidade", "Unidade", CelTxt(ps, r, PJ_UNID), "lista", ListaUnidades()
+    FormField "area", "Área demandante", CelTxt(ps, r, PJ_AREA), "lista", ListaAreas()
+    FormField "respdem", "Responsável demandante", CelTxt(ps, r, PJ_RESPDEM), "texto"
 
-    FormField "objcod", "Código do objeto de custo", IIf(novo, "", SVal(ps.Cells(r, PJ_OBJCOD).Value)), "texto", , 1, _
+    FormField "objcod", "Código do objeto de custo", CelTxt(ps, r, PJ_OBJCOD), "texto", , 1, _
               "a descrição é preenchida automaticamente pelo cadastro"
-    FormField "abertura", "Data de abertura", IIf(novo, Format$(Date, "dd/mm/yyyy"), FmtDEdit(ps.Cells(r, PJ_ABERTURA).Value)), "data"
-    FormField "status", "Status informado", IIf(novo, "EM ANDAMENTO", SVal(ps.Cells(r, PJ_STATUS).Value)), "lista", ListaStatus()
+    FormField "abertura", "Data de abertura", IIf(novo, Format$(Date, "dd/mm/yyyy"), CelData(ps, r, PJ_ABERTURA)), "data"
+    FormField "status", "Status informado", IIf(novo, "EM ANDAMENTO", CelTxt(ps, r, PJ_STATUS)), "lista", ListaStatus()
 
-    FormField "etapa", "Etapa atual", IIf(novo, "ELABORAÇÃO DO PROJETO", SVal(ps.Cells(r, PJ_ETAPA).Value)), "lista", ListaEtapas()
-    FormField "inietapa", "Início da etapa", IIf(novo, Format$(Date, "dd/mm/yyyy"), FmtDEdit(ps.Cells(r, PJ_INIETAPA).Value)), "data"
-    FormField "bloq", "Bloqueado?", IIf(novo, "NÃO", SVal(ps.Cells(r, PJ_BLOQ).Value)), "lista", Array("NÃO", "SIM")
+    FormField "etapa", "Etapa atual", IIf(novo, "ELABORAÇÃO DO PROJETO", CelTxt(ps, r, PJ_ETAPA)), "lista", ListaEtapas()
+    FormField "inietapa", "Início da etapa", IIf(novo, Format$(Date, "dd/mm/yyyy"), CelData(ps, r, PJ_INIETAPA)), "data"
+    FormField "bloq", "Bloqueado?", IIf(novo, "NÃO", CelTxt(ps, r, PJ_BLOQ)), "lista", Array("NÃO", "SIM")
 
-    FormField "motivo", "Dificuldade encontrada", IIf(novo, "", SVal(ps.Cells(r, PJ_DIFIC).Value)), "lista", ListaMotivos(), 1, _
+    FormField "motivo", "Dificuldade encontrada", CelTxt(ps, r, PJ_DIFIC), "lista", ListaMotivos(), 1, _
               "obrigatório quando o projeto está bloqueado"
-    FormField "proxacao", "Próxima ação", IIf(novo, "", SVal(ps.Cells(r, PJ_PROXACAO).Value)), "texto", , 2
+    FormField "proxacao", "Próxima ação", CelTxt(ps, r, PJ_PROXACAO), "texto", , 2
 
     FormListaDeIntervalo "unidade", "=Lista_Unidades"
     FormListaDeIntervalo "area", "=Lista_Areas"

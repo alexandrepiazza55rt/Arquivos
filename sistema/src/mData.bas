@@ -323,3 +323,25 @@ Public Function PrefGet(ByVal chave As String, Optional ByVal padrao As String =
     Next i
     PrefGet = padrao
 End Function
+
+'==============================================================================
+' Leitura protegida de célula
+'
+' O IIf do VBA avalia OS DOIS lados, sempre — não existe curto-circuito. Escrever
+' IIf(novo, "", Cells(r, c).Value) com r = 0 estoura antes de o IIf decidir.
+' Estas funções conferem a linha primeiro e devolvem vazio quando não existe.
+'==============================================================================
+Public Function CelTxt(ws As Worksheet, ByVal r As Long, ByVal c As Long) As String
+    If r >= FIRST_ROW Then CelTxt = SVal(ws.Cells(r, c).Value)
+End Function
+
+Public Function CelNum(ws As Worksheet, ByVal r As Long, ByVal c As Long) As String
+    If r >= FIRST_ROW Then CelNum = CStr(NVal(ws.Cells(r, c).Value))
+End Function
+
+Public Function CelData(ws As Worksheet, ByVal r As Long, ByVal c As Long) As String
+    Dim v As Variant
+    If r < FIRST_ROW Then Exit Function
+    v = ws.Cells(r, c).Value
+    If IsDate(v) Then CelData = Format$(CDate(v), "dd/mm/yyyy")
+End Function

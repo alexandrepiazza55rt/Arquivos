@@ -149,7 +149,7 @@ Public Sub NotaFormRender(ByVal ctx As String)
 
     y = RenderShell(IIf(novo, "Lançar nota fiscal", "Editar lançamento"), _
                     IIf(novo, "Registre o recebimento de um item já comprado", _
-                              "Nota " & SVal(es.Cells(r, EN_NF).Value)), "notas")
+                              "Nota " & CelTxt(es, r, EN_NF)), "notas")
 
     ' item escolhido
     If novo Then
@@ -194,20 +194,20 @@ Public Sub NotaFormRender(ByVal ctx As String)
     '--- campos --------------------------------------------------------------
     FormBegin x, y, w, 4
 
-    FormField "nf", "Nº da NF / remessa", VN("nf", IIf(novo, "", SVal(es.Cells(r, EN_NF).Value))), "texto"
+    FormField "nf", "Nº da NF / remessa", VN("nf", CelTxt(es, r, EN_NF)), "texto"
     FormField "data", "Data de recebimento", _
-              VN("data", IIf(novo, Format$(DataRefer, "dd/mm/yyyy"), FmtDEdit(es.Cells(r, EN_DATA).Value))), "data"
+              VN("data", IIf(novo, Format$(DataRefer, "dd/mm/yyyy"), CelData(es, r, EN_DATA))), "data"
     FormField "qtd", "Quantidade recebida", _
-              VN("qtd", IIf(novo, "", CStr(NVal(es.Cells(r, EN_QTD).Value)))), "numero"
+              VN("qtd", CelNum(es, r, EN_QTD)), "numero"
     FormField "unid", "Unidade recebedora", _
-              VN("unid", IIf(novo, "", SVal(es.Cells(r, EN_UNID).Value))), "lista", ListaUnidades()
+              VN("unid", CelTxt(es, r, EN_UNID)), "lista", ListaUnidades()
 
     FormField "custodia", "Local de custódia", _
-              VN("custodia", IIf(novo, "", SVal(es.Cells(r, EN_CUSTODIA).Value))), "lista", ListaCustodia()
+              VN("custodia", CelTxt(es, r, EN_CUSTODIA)), "lista", ListaCustodia()
     FormField "sitfis", "Situação física", _
-              VN("sitfis", IIf(novo, "PENDENTE DE CONFERÊNCIA", SVal(es.Cells(r, EN_SITFIS).Value))), _
+              VN("sitfis", IIf(novo, "PENDENTE DE CONFERÊNCIA", CelTxt(es, r, EN_SITFIS))), _
               "lista", ListaSitFisica()
-    FormField "obs", "Observação", VN("obs", IIf(novo, "", SVal(es.Cells(r, EN_OBS).Value))), "texto", , 2
+    FormField "obs", "Observação", VN("obs", CelTxt(es, r, EN_OBS)), "texto", , 2
 
     FormListaDeIntervalo "unid", "=Lista_Unidades"
     FormListaDeIntervalo "custodia", "=Lista_Custodia"

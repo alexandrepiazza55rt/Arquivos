@@ -176,9 +176,9 @@ Public Sub ProdutoFormRender(ByVal ctx As String)
 
     FormBegin x, y, w, 3
     FormSection "Produto", "código, descrição e classificação"
-    FormField "cod", "Código do produto", IIf(novo, "", SVal(ps.Cells(r, 22).Value)), "texto"
-    FormField "desc", "Descrição", IIf(novo, "", SVal(ps.Cells(r, 23).Value)), "texto", , 2
-    FormField "tipo", "Tipo de item", IIf(novo, "", SVal(ps.Cells(r, 24).Value)), "lista", _
+    FormField "cod", "Código do produto", CelTxt(ps, r, 22), "texto"
+    FormField "desc", "Descrição", CelTxt(ps, r, 23), "texto", , 2
+    FormField "tipo", "Tipo de item", CelTxt(ps, r, 24), "lista", _
               Array("CÂMERA", "LICENÇA", "SOFTWARE", "SWITCH", "EQUIPAMENTO", "INTERFONE", _
                     "COLETOR FACIAL", "INFRAESTRUTURA", "SERVIÇO")
 

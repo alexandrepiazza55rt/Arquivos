@@ -141,40 +141,40 @@ Public Sub ItemFormRender(ByVal ctx As String)
 
     y = RenderShell(IIf(novo, "Novo item", "Editar item"), _
                     IIf(novo, "Um item por produto e por chamado", _
-                              SVal(cad.Cells(r, IT_ID).Value) & "  ·  " & SVal(cad.Cells(r, IT_DESC).Value)), _
+                              CelTxt(cad, r, IT_ID) & "  ·  " & CelTxt(cad, r, IT_DESC)), _
                     "itens")
 
     FormBegin x, y, w, 4
     FormCompacto
 
     FormSection "Item do projeto", "identificação do produto previsto no escopo"
-    FormField "chamado", "Nº do chamado", IIf(novo, "", SVal(cad.Cells(r, IT_CHAMADO).Value)), "texto"
-    FormField "cod", "Código do produto", IIf(novo, "", SVal(cad.Cells(r, IT_COD).Value)), "texto", , 1, _
+    FormField "chamado", "Nº do chamado", CelTxt(cad, r, IT_CHAMADO), "texto"
+    FormField "cod", "Código do produto", CelTxt(cad, r, IT_COD), "texto", , 1, _
               "descrição e tipo vêm do cadastro de produtos"
-    FormField "qprev", "Qtd. prevista", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QPREV).Value))), "numero"
-    FormField "descr", "Descrição", IIf(novo, "", SVal(cad.Cells(r, IT_DESC).Value)), "leitura"
+    FormField "qprev", "Qtd. prevista", CelNum(cad, r, IT_QPREV), "numero"
+    FormField "descr", "Descrição", CelTxt(cad, r, IT_DESC), "leitura"
 
     FormSection "Solicitação de compra", "acompanhamento do fluxo de suprimentos"
-    FormField "req", "Nº requisição", IIf(novo, "", SVal(cad.Cells(r, IT_REQ).Value)), "texto"
-    FormField "sc", "Nº SC", IIf(novo, "", SVal(cad.Cells(r, IT_SC).Value)), "texto"
-    FormField "qreq", "Qtd. requisitada", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QREQ).Value))), "numero"
-    FormField "comprador", "Comprador", IIf(novo, "", SVal(cad.Cells(r, IT_COMPRADOR).Value)), "texto"
-    FormField "dtreq", "Data da requisição", IIf(novo, "", FmtDEdit(cad.Cells(r, IT_DTREQ).Value)), "data"
-    FormField "enviosup", "Envio ao suprimentos", IIf(novo, "", FmtDEdit(cad.Cells(r, IT_ENVIOSUP).Value)), "data"
+    FormField "req", "Nº requisição", CelTxt(cad, r, IT_REQ), "texto"
+    FormField "sc", "Nº SC", CelTxt(cad, r, IT_SC), "texto"
+    FormField "qreq", "Qtd. requisitada", CelNum(cad, r, IT_QREQ), "numero"
+    FormField "comprador", "Comprador", CelTxt(cad, r, IT_COMPRADOR), "texto"
+    FormField "dtreq", "Data da requisição", CelData(cad, r, IT_DTREQ), "data"
+    FormField "enviosup", "Envio ao suprimentos", CelData(cad, r, IT_ENVIOSUP), "data"
 
     FormSection "Ordem de compra", "dados do fornecedor e do prazo de entrega"
-    FormField "oc", "Nº OC", IIf(novo, "", SVal(cad.Cells(r, IT_OC).Value)), "texto"
-    FormField "forn", "Fornecedor", IIf(novo, "", SVal(cad.Cells(r, IT_FORN).Value)), "texto", , 2
-    FormField "qcomp", "Qtd. comprada", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QCOMP).Value))), "numero"
-    FormField "dtoc", "Data da OC", IIf(novo, "", FmtDEdit(cad.Cells(r, IT_DTOC).Value)), "data"
-    FormField "prevent", "Previsão de entrega", IIf(novo, "", FmtDEdit(cad.Cells(r, IT_PREVENT).Value)), "data"
+    FormField "oc", "Nº OC", CelTxt(cad, r, IT_OC), "texto"
+    FormField "forn", "Fornecedor", CelTxt(cad, r, IT_FORN), "texto", , 2
+    FormField "qcomp", "Qtd. comprada", CelNum(cad, r, IT_QCOMP), "numero"
+    FormField "dtoc", "Data da OC", CelData(cad, r, IT_DTOC), "data"
+    FormField "prevent", "Previsão de entrega", CelData(cad, r, IT_PREVENT), "data"
 
     FormSection "Evolução física", "o recebido é somado automaticamente pelas notas lançadas"
-    FormField "qreceb", "Qtd. recebida", IIf(novo, "0", CStr(NVal(cad.Cells(r, IT_QRECEB).Value))), "leitura"
-    FormField "qlib", "Qtd. liberada", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QLIB).Value))), "numero"
-    FormField "qinst", "Qtd. instalada", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QINST).Value))), "numero"
-    FormField "ips", "IPs disponibilizados", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_IPS).Value))), "numero"
-    FormField "qvms", "Qtd. incluída no VMS", IIf(novo, "", CStr(NVal(cad.Cells(r, IT_QVMS).Value))), "numero"
+    FormField "qreceb", "Qtd. recebida", IIf(novo, "0", CelNum(cad, r, IT_QRECEB)), "leitura"
+    FormField "qlib", "Qtd. liberada", CelNum(cad, r, IT_QLIB), "numero"
+    FormField "qinst", "Qtd. instalada", CelNum(cad, r, IT_QINST), "numero"
+    FormField "ips", "IPs disponibilizados", CelNum(cad, r, IT_IPS), "numero"
+    FormField "qvms", "Qtd. incluída no VMS", CelNum(cad, r, IT_QVMS), "numero"
 
     FormFooter FormBottom() + 8, ActProc1("SalvarItem", CStr(r)), ActIr("itens"), _
                IIf(novo, "Cadastrar item", "Salvar alterações"), _

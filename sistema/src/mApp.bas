@@ -27,7 +27,7 @@ Private mAtivo As Boolean
 Private mAbasOcultas As Boolean
 
 Public Const APP_NOME As String = "Monitoramento Patrimonial"
-Public Const APP_VER  As String = "1.0.2"
+Public Const APP_VER  As String = "1.0.3"
 
 '==============================================================================
 ' Entrada e saida
@@ -229,11 +229,17 @@ Public Sub Ir(ByVal tela As String, Optional ByVal ctx As String = "", Optional 
     Exit Sub
 
 Falhou:
+    Dim nErro As Long, sErro As String
+    nErro = Err.Number
+    sErro = Err.Description
     Application.EnableEvents = True
     Application.ScreenUpdating = True
-    MsgBox "Ocorreu um erro ao montar a tela '" & tela & "'." & vbCrLf & vbCrLf & _
-           Err.Description & vbCrLf & vbCrLf & _
-           "Use Ctrl+Shift+E para devolver o Excel ao estado normal.", vbExclamation, APP_NOME
+    MsgBox "Erro ao montar a tela '" & tela & "'." & vbCrLf & vbCrLf & _
+           "Código: " & nErro & vbCrLf & _
+           "Mensagem: " & sErro & vbCrLf & _
+           "Contexto: " & IIf(ctx = "", "(nenhum)", ctx) & IIf(aba = "", "", "  ·  aba " & aba) & vbCrLf & _
+           "Versão: " & APP_VER & vbCrLf & vbCrLf & _
+           "Ctrl+Shift+E devolve o Excel ao estado normal.", vbExclamation, APP_NOME
 End Sub
 
 Public Sub Recarregar()
