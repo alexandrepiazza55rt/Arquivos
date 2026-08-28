@@ -1,2 +1,3 @@
 *.xlsm binary
 *.zip binary
+*.html -diff
