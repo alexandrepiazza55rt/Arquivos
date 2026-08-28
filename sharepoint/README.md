@@ -8,6 +8,7 @@ ou https://claude.ai/code/artifact/283adb6a-d689-4fd6-907d-75c2c6f9db64
 | Arquivo | Para quê |
 |---|---|
 | `SharePoint_Importacao.xlsx` | Os dados de hoje, uma aba por lista, já no formato de colagem |
+| `listas/MP_*.xlsx` | A mesma coisa, um arquivo por lista — para quando a importação do SharePoint não deixa escolher a tabela |
 | `formatacao/coluna_Situacao.json` | Badge colorido na coluna Situação |
 | `formatacao/coluna_ConsumoSLA.json` | Barra de prazo com cor por faixa |
 | `formatacao/coluna_DiasAtraso.json` | Número em vermelho quando há atraso |
