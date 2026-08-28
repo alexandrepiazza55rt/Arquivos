@@ -37,6 +37,8 @@ Public Sub IniciarSistema()
 
     If Not ChecarEstrutura() Then Exit Sub
 
+    GarantirInstalacao
+
     GuardarEstadoExcel
     AplicarChrome
     EsconderTelaInicial

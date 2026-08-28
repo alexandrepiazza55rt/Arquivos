@@ -269,7 +269,7 @@ Private Sub AbaHistorico(ByVal chamado As String, ByVal x As Double, ByVal y As 
     For k = 1 To m
         i = idx(k)
         et(k) = SVal(d(i, HI_ETAPA))
-        dt(k) = FmtD(d(i, HI_INICIO)) & IIf(IsDate(d(i, HI_FIM)), "  →  " & FmtD(d(i, HI_FIM)), "  →  em curso")
+        dt(k) = FmtD(d(i, HI_INICIO)) & IIf(IsDate(d(i, HI_FIM)), "  " & ChrW(&H2192) & "  " & FmtD(d(i, HI_FIM)), "  " & ChrW(&H2192) & "  em curso")
         es(k) = SVal(d(i, HI_SIT))
         nt(k) = SVal(d(i, HI_RESP)) & "  ·  " & FmtN(d(i, HI_DIAS)) & " dias" & _
                 IIf(NVal(d(i, HI_ATRASO)) > 0, "  ·  " & FmtN(d(i, HI_ATRASO)) & " dias de atraso", "") & _

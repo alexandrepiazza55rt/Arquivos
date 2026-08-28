@@ -1,9 +1,39 @@
-# Instalação — 10 minutos, uma única vez
+# Como abrir
 
-Depois disso, o arquivo `.xlsm` é o sistema: você compartilha ele e quem abrir já
-cai direto na tela do sistema.
+## O caminho normal: só abrir o arquivo
+
+Baixe **`Sistema_Monitoramento.xlsm`** e dê dois cliques.
+
+1. O Excel mostra uma faixa amarela de segurança no topo → clique em **Habilitar conteúdo**.
+2. O sistema abre sozinho.
+
+É isso. O arquivo já traz a sua planilha inteira (os 78 projetos, os itens, as
+notas, as fórmulas) mais o sistema embutido. **Nenhum dado foi alterado.**
+
+A faixa amarela aparece uma vez por pessoa, por arquivo — é o Excel perguntando
+se você confia nas macros. Para compartilhar com a equipe, mande o `.xlsm`
+normalmente; cada pessoa vai ver a faixa na primeira abertura.
+
+> Guarde uma cópia da sua planilha original antes de começar a lançar coisas no
+> sistema. Não porque exista risco conhecido, mas porque é a primeira semana de
+> uso de uma ferramenta nova.
+
+**`Ctrl` + `Shift` + `E`** devolve o Excel ao estado normal a qualquer momento.
 
 ---
+
+## Se o Excel reclamar do arquivo
+
+O `.xlsm` foi montado fora do Excel, então existe a chance de ele recusar. Se
+aparecer *"encontramos um problema com algum conteúdo"* ou se as macros não
+carregarem, use o caminho abaixo — ele parte da sua planilha original e é o
+procedimento padrão, sem nenhuma surpresa. Leva uns 10 minutos, uma vez só.
+
+Me avise se isso acontecer, com o texto da mensagem: dá para corrigir.
+
+---
+
+# Instalação manual (plano B)
 
 ## Antes de começar
 

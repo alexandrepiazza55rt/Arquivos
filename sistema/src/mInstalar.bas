@@ -10,6 +10,32 @@ Option Explicit
 
 Private Const HOME As String = "home_"
 
+' Executada em toda abertura: cria o que faltar, sem incomodar o usuario.
+' Na primeira vez ela e a propria instalacao; nas seguintes nao faz nada.
+Public Sub GarantirInstalacao()
+    Dim ws As Worksheet, i As Long, temHome As Boolean
+    On Error Resume Next
+
+    Set ws = Canvas()
+    SysSheet
+
+    If ws.Index <> 1 Then ws.Move Before:=ThisWorkbook.Worksheets(1)
+
+    For i = 1 To ws.Shapes.Count
+        If Left$(ws.Shapes(i).Name, Len(HOME)) = HOME Then temHome = True: Exit For
+    Next i
+    If Not temHome Then
+        ws.Unprotect
+        ResetGrid ws
+        DesenharTelaInicial
+    End If
+
+    If Application.Calculation <> xlCalculationAutomatic Then
+        Application.Calculation = xlCalculationAutomatic
+    End If
+    On Error GoTo 0
+End Sub
+
 Public Sub InstalarSistema()
     Dim ws As Worksheet
 
