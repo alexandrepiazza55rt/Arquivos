@@ -155,8 +155,10 @@ def conferir_placement():
         for i, l in enumerate(linhas):
             if 'AddShape' not in l:
                 continue
-            janela = '\n'.join(linhas[i:i + 30])
-            if 'Placement' not in janela:
+            fim = i
+            while fim < len(linhas) and not re.match(r'\s*End (Sub|Function)\b', linhas[fim]):
+                fim += 1
+            if 'Placement' not in '\n'.join(linhas[i:fim]):
                 faltando.append('%s:%d' % (os.path.basename(caminho), i + 1))
     if faltando:
         raise SystemExit('AddShape sem Placement em: ' + ', '.join(faltando))
