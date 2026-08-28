@@ -25,28 +25,30 @@ Public Const ROW_H         As Double = 42
 Public Const HEAD_H        As Double = 38
 
 '--- Glifos (Segoe MDL2 Assets) ----------------------------------------------
-Public Const IC_PAINEL     As String = ChrW(&HE80F)   ' casa
-Public Const IC_PROJETOS   As String = ChrW(&HE8A5)   ' documento
-Public Const IC_ITENS      As String = ChrW(&HE8EF)   ' caixa / itens
-Public Const IC_COMPRAS    As String = ChrW(&HE7BF)   ' carrinho
-Public Const IC_NOTAS      As String = ChrW(&HE8EC)   ' nota / entrega
-Public Const IC_CONFER     As String = ChrW(&HE73E)   ' check
-Public Const IC_CADASTRO   As String = ChrW(&HE713)   ' engrenagem
-Public Const IC_CHECKUP    As String = ChrW(&HE7BA)   ' alerta
-Public Const IC_BUSCA      As String = ChrW(&HE721)
-Public Const IC_ADD        As String = ChrW(&HE710)
-Public Const IC_EDIT       As String = ChrW(&HE70F)
-Public Const IC_SAVE       As String = ChrW(&HE74E)
-Public Const IC_DEL        As String = ChrW(&HE74D)
-Public Const IC_REFRESH    As String = ChrW(&HE72C)
-Public Const IC_FILTER     As String = ChrW(&HE71C)
-Public Const IC_LEFT       As String = ChrW(&HE76B)
-Public Const IC_RIGHT      As String = ChrW(&HE76C)
-Public Const IC_CLOSE      As String = ChrW(&HE711)
-Public Const IC_BACK       As String = ChrW(&HE72B)
-Public Const IC_EXPORT     As String = ChrW(&HE896)
-Public Const IC_OK         As String = ChrW(&HE73E)
-Public Const IC_DOT        As String = ChrW(&HE915)
+' Precisam ser Property Get, e nao Const: o VBA so aceita expressao literal em
+' Const, e ChrW e uma chamada de funcao.
+Public Property Get IC_PAINEL()     As String: IC_PAINEL = ChrW(&HE80F): End Property   ' casa
+Public Property Get IC_PROJETOS()   As String: IC_PROJETOS = ChrW(&HE8A5): End Property   ' documento
+Public Property Get IC_ITENS()      As String: IC_ITENS = ChrW(&HE8EF): End Property   ' caixa / itens
+Public Property Get IC_COMPRAS()    As String: IC_COMPRAS = ChrW(&HE7BF): End Property   ' carrinho
+Public Property Get IC_NOTAS()      As String: IC_NOTAS = ChrW(&HE8EC): End Property   ' nota / entrega
+Public Property Get IC_CONFER()     As String: IC_CONFER = ChrW(&HE73E): End Property   ' check
+Public Property Get IC_CADASTRO()   As String: IC_CADASTRO = ChrW(&HE713): End Property   ' engrenagem
+Public Property Get IC_CHECKUP()    As String: IC_CHECKUP = ChrW(&HE7BA): End Property   ' alerta
+Public Property Get IC_BUSCA()      As String: IC_BUSCA = ChrW(&HE721): End Property
+Public Property Get IC_ADD()        As String: IC_ADD = ChrW(&HE710): End Property
+Public Property Get IC_EDIT()       As String: IC_EDIT = ChrW(&HE70F): End Property
+Public Property Get IC_SAVE()       As String: IC_SAVE = ChrW(&HE74E): End Property
+Public Property Get IC_DEL()        As String: IC_DEL = ChrW(&HE74D): End Property
+Public Property Get IC_REFRESH()    As String: IC_REFRESH = ChrW(&HE72C): End Property
+Public Property Get IC_FILTER()     As String: IC_FILTER = ChrW(&HE71C): End Property
+Public Property Get IC_LEFT()       As String: IC_LEFT = ChrW(&HE76B): End Property
+Public Property Get IC_RIGHT()      As String: IC_RIGHT = ChrW(&HE76C): End Property
+Public Property Get IC_CLOSE()      As String: IC_CLOSE = ChrW(&HE711): End Property
+Public Property Get IC_BACK()       As String: IC_BACK = ChrW(&HE72B): End Property
+Public Property Get IC_EXPORT()     As String: IC_EXPORT = ChrW(&HE896): End Property
+Public Property Get IC_OK()         As String: IC_OK = ChrW(&HE73E): End Property
+Public Property Get IC_DOT()        As String: IC_DOT = ChrW(&HE915): End Property
 
 '==============================================================================
 ' Conversao de unidades

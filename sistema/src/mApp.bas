@@ -27,7 +27,7 @@ Private mAtivo As Boolean
 Private mAbasOcultas As Boolean
 
 Public Const APP_NOME As String = "Monitoramento Patrimonial"
-Public Const APP_VER  As String = "1.0"
+Public Const APP_VER  As String = "1.0.1"
 
 '==============================================================================
 ' Entrada e saida
