@@ -86,6 +86,29 @@ DiasAtraso (Calculado)  ConsumoSLA (Calculado)  Situacao (Calculado)
 > importação do Excel que mapeou a primeira coluna para o Título. Em fórmulas,
 > JSON e fluxos, use `Title`.
 
+> **ARMADILHA MAIOR — nome interno genérico.** A importação do Excel cria as
+> colunas com nome interno `field_1`, `field_2`, … e guarda o cabeçalho apenas
+> como rótulo de exibição. Em `MP_Projetos`: `EtapaAtual` = `field_7`,
+> `InicioEtapa` = `field_8`, `Status` = `field_9`, `Bloqueado` = `field_10`.
+>
+> Onde isso importa:
+> - **REST e Power Automate** usam o nome INTERNO. Um filtro
+>   `Status ne 'CONCLUÍDO'` devolve erro 400, e `item()?['InicioEtapa']` volta
+>   vazio — o que zeraria `DiasNaEtapa` de todos os projetos ativos sem avisar.
+> - **Fórmulas de coluna calculada** usam o nome de EXIBIÇÃO. Por isso
+>   `=SE([Status]=...)` funcionou normalmente.
+> - **Formatação JSON** usa o nome INTERNO em `[$Campo]`, mas `@currentField`
+>   não depende de nome.
+>
+> Nome interno não pode ser alterado depois de criada a coluna. Levante o mapa
+> real com `/_api/web/lists/getbytitle('MP_Projetos')/fields` e use sempre ele
+> em fluxo e REST.
+
+> **Por isso, as três listas que faltam NÃO devem ser criadas importando do
+> Excel.** Crie as colunas com nome interno limpo (via REST ou pelo painel de
+> criar coluna) e só depois carregue as linhas. Custa alguns minutos a mais e
+> evita arrastar `field_N` para dentro do Fluxo B, das exibições e da página.
+
 ---
 
 ## O que falta — em ordem
