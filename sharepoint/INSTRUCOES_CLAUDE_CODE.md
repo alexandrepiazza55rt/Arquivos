@@ -152,11 +152,17 @@ Coluna → **Configurações de coluna → Formatar esta coluna → Modo avança
 | `coluna_SituacaoFisica.json` | MP_Entregas | SituacaoFisica |
 | `coluna_TipoItem.json` | MP_Produtos | TipoItem — **já aplicado** |
 
-> **Realce de linha, versão 2.** A primeira versão pintava também ATRASADO, e
-> o rosa da linha engolia o rosa da pílula. Além disso ATRASADO são 24 de 78
-> hoje: realçar um terço da lista não ajuda a varrer, vira ruído. A v2 realça
-> só BLOQUEADO (vermelho) e EM RISCO (laranja) — o que é raro e exige ação.
-> ATRASADO continua sinalizado pelo badge, sobre linha branca.
+> **Realce de linha, versão 3.** O critério: **o realce marca o que ainda dá
+> para evitar; o badge marca o que já aconteceu.** Por isso ele cobre a faixa
+> de ação — BLOQUEADO (vermelho), EM RISCO (laranja) e ATENÇÃO (amarelo) — e
+> deixa ATRASADO só com o badge.
+>
+> A v1 pintava ATRASADO e o rosa da linha engolia o rosa da pílula. Pior que
+> isso: são 27 de 78, e realçar um terço da lista não ajuda a varrer. Um
+> projeto atrasado há 150 dias não é urgente hoje; um a um dia de estourar é.
+>
+> A v2 tirou ATRASADO mas ficou só com BLOQUEADO e EM RISCO — que, depois do
+> Fluxo A rodar, somam zero. Regra que nunca acende não sinaliza nada.
 
 ### 3. Criar as três listas que faltam
 
