@@ -295,9 +295,26 @@ Use uma variável inicializada antes do laço para somar. Cuidado com o
 **loop infinito**: este fluxo altera `MP_Itens`, não `MP_Entregas`, então não
 dispara a si mesmo. Se algum dia mudar o gatilho para `MP_Itens`, ele vira loop.
 
-Exclusão de entrega **não dispara** este gatilho. Ou crie um segundo fluxo com
-"Quando um item for excluído", ou combine com o usuário marcar como cancelada
-em vez de excluir.
+> **A lacuna da exclusão — decidida, mas adiada.**
+>
+> Exclusão de entrega não dispara o gatilho. Confirmado na prática durante o
+> teste: ao apagar a linha, `QtdRecebida` ficou em 3 quando a verdade era 2.
+>
+> **Não faça um segundo fluxo com "Quando um item for excluído".** Esse gatilho
+> entrega pouco mais que o ID do item removido, e a linha já não existe para
+> dizer qual `IDItem` recalcular. Você saberia que algo foi apagado sem saber
+> o que corrigir.
+>
+> **A saída é não excluir.** Acrescente a MP_Entregas uma coluna `Cancelada`
+> (Sim/Não) e filtre a soma do Fluxo B por `Cancelada ne 'Sim'`. Estornar
+> passa a ser uma edição — que dispara o gatilho normalmente — e ainda deixa
+> rastro de que houve estorno, em vez de a linha sumir sem explicação.
+>
+> **Quando fazer:** junto com a configuração dos formulários de entrada, não
+> agora. Enquanto só a equipe do projeto mexe nas listas, ninguém exclui
+> lançamento. O risco começa quando o setor entra, e é o mesmo momento em que
+> se define como a pessoa estorna uma nota. Fazer as duas coisas juntas evita
+> mexer duas vezes num fluxo já testado.
 
 > **Sinal de saúde do Fluxo A.** A distribuição de Situacao **não** serve de
 > conferência recorrente: ela muda todo dia, porque projeto atrasa sozinho com
