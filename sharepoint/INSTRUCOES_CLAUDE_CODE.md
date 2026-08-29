@@ -266,17 +266,17 @@ Nome: `MP - Atualiza prazos`.
 > SLADias. `SLADias` e `DiasNaEtapa` em `MP_Projetos` foram criadas à mão e
 > têm nome limpo.
 
-> **LIGAR UM FLUXO JÁ É GRAVAR.** Ligar um fluxo de recorrência no Power
-> Automate dispara uma execução na hora, além de armar o agendamento. Não
-> existe "ligar para depois testar".
+> **Restrinja o filtro a um item antes da primeira ativação de qualquer fluxo
+> que grava.** É precaução barata, e vale mesmo sem causa conhecida.
 >
-> Por isso, ao criar qualquer fluxo que grava: **restrinja o filtro a um item
-> antes de ligar pela primeira vez.** No Fluxo A isso evitou que o start
-> escrevesse nos 54 antes de qualquer conferência.
+> Origem da regra: na primeiríssima ativação do Fluxo A o histórico registrou
+> duas execuções, e a hipótese foi que ligar dispara uma execução. **A hipótese
+> foi testada depois e não se confirmou** — stop seguido de start gerou zero
+> execuções em três tentativas. O mecanismo das duas execuções iniciais
+> continua sem explicação isolada.
 >
-> Descoberto na prática ao ligar o Fluxo A: o histórico registrou duas
-> execuções, a do start e a manual. Sem dano, porque o MERGE é idempotente —
-> as duas gravaram o mesmo valor no mesmo item.
+> Ou seja: mantenha a prática, mas não confie na causa. Um fluxo pode executar
+> quando você não espera, e o filtro de um item é o que limita o estrago.
 
 ### 5. Fluxo B — soma as entregas no item
 
@@ -303,6 +303,18 @@ em vez de excluir.
 > conferência recorrente: ela muda todo dia, porque projeto atrasa sozinho com
 > o passar do tempo. O que serve é isto: **o chamado 123 sobe exatamente +1 em
 > DiasNaEtapa por dia.** Se um dia não subir, o fluxo parou de rodar.
+
+> **Carga inicial de QtdRecebida.** O Fluxo B só calcula a soma de um item
+> quando aquele item recebe um novo evento de entrega. Os 21 itens nascem com
+> `QtdRecebida` vazia e assim ficariam por tempo indeterminado.
+>
+> Depois de validar o Fluxo B, carregue os 21 valores por REST a partir de
+> `carga_QtdRecebida.xlsx`, casando por `Title` (que em MP_Itens guarda o
+> IDItem). Doze itens têm recebimento, nove são zero. A soma total é 38, o
+> mesmo número que aparece no funil do painel.
+>
+> Essa carga também serve de faxina: se o teste do Fluxo B deixar resíduo,
+> ela sobrescreve com o valor verdadeiro.
 
 ### 6. Exibições
 
