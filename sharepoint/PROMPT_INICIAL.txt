@@ -1,0 +1,39 @@
+===========================================================================
+ COLE ISTO NO CLAUDE CODE DA SUA MÁQUINA
+===========================================================================
+
+Antes de colar:
+
+ 1. Descompacte a pasta Monitoramento_SharePoint em algum lugar
+ 2. Abra o terminal DENTRO dessa pasta e rode:  claude
+ 3. Feche o Edge por completo e reabra pelo PowerShell:
+
+      Start-Process msedge -ArgumentList '--remote-debugging-port=9222'
+
+ 4. Nessa janela, entre no site e confirme que está logado
+ 5. Cole o texto abaixo
+
+
+---------------------------------------------------------------------------
+
+Leia o arquivo INSTRUCOES_CLAUDE_CODE.md desta pasta. Ele tem todo o contexto
+do projeto: o que já foi feito no SharePoint, o que falta, as fórmulas, os
+JSON de formatação e as armadilhas já mapeadas.
+
+Eu abri o Edge com a porta de depuração 9222 e já estou autenticado no site
+da empresa. Conecte-se a essa janela existente com
+chromium.connectOverCDP('http://localhost:9222') — não abra navegador novo e
+não me peça credencial nenhuma.
+
+Regras enquanto opera o navegador:
+- navegue apenas em inpasabr.sharepoint.com e make.powerautomate.com
+- me diga o que vai fazer antes de fazer
+- pare e peça confirmação antes de excluir qualquer coisa ou rodar fluxo que
+  grava dados
+- não toque em nada que não comece com o prefixo MP_
+
+Comece pelo item 1 do documento: preencher SLADias e DiasNaEtapa na lista
+MP_Projetos com os valores do arquivo colar_SLADias_DiasNaEtapa.xlsx. Faça a
+conferência dos quatro chamados que o documento lista antes de seguir.
+
+Vá um item por vez e me mostre o resultado de cada um.

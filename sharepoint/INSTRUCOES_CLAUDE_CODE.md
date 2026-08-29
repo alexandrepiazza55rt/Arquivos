@@ -1,0 +1,258 @@
+# Handoff — implantar o Monitoramento Patrimonial no SharePoint
+
+Este documento é para o **Claude Code rodando na máquina do Alexandre**. Ele
+contém tudo que é preciso saber: não há conversa anterior a recuperar.
+
+- **Site:** https://inpasabr.sharepoint.com/sites/CentraldeProteodoNegcio
+- **Idioma do site:** português. Fórmulas usam `SE` e **ponto e vírgula**. Confirmado.
+- **Convenção:** toda lista nova leva o prefixo `MP_` e é criada com
+  **"Mostrar na navegação do site" DESMARCADO**.
+- **Regra de ouro:** não altere nada fora do prefixo `MP_`. O site tem listas e
+  bibliotecas de outras equipes.
+
+---
+
+## Como acessar o navegador
+
+O usuário **não vai fornecer credenciais**. Ele vai abrir uma janela já
+autenticada e autorizar você a controlá-la, sob supervisão dele.
+
+Peça a ele para fechar o Edge por completo e reabrir assim:
+
+```powershell
+# Edge
+Start-Process msedge -ArgumentList '--remote-debugging-port=9222'
+```
+
+```powershell
+# Chrome, se preferir
+Start-Process chrome -ArgumentList '--remote-debugging-port=9222'
+```
+
+Depois conecte-se à instância existente, sem abrir navegador novo:
+
+```javascript
+const { chromium } = require('playwright');
+const browser = await chromium.connectOverCDP('http://localhost:9222');
+const ctx = browser.contexts()[0];
+const page = ctx.pages()[0] ?? await ctx.newPage();
+```
+
+Regras ao operar essa janela:
+
+1. Navegue **apenas** em `inpasabr.sharepoint.com` e `make.powerautomate.com`.
+2. Nunca abra outras abas nem toque em nada fora do escopo. É o perfil pessoal
+   do usuário, com tudo logado.
+3. Antes de qualquer ação destrutiva — excluir lista, excluir coluna, rodar
+   fluxo que grava — **pare e peça confirmação**.
+4. Descreva o que vai fazer antes de fazer. Ele está supervisionando.
+
+---
+
+## Estado atual
+
+Já existe, feito à mão:
+
+| Lista | Itens | Situação |
+|---|---|---|
+| `MP_Produtos` | 26 | pronta, com badge JSON em TipoItem |
+| `MP_ObjetosCusto` | 108 | pronta |
+| `MP_EtapasSLA` | 12 | pronta |
+| `MP_Projetos` | 78 | dados importados, colunas criadas, **valores vazios** |
+
+Colunas já criadas em `MP_Projetos`:
+
+```
+Title (era Chamado)   NomeProjeto   Unidade   AreaDemandante   CodObjetoCusto
+ResponsavelDemandante DataAbertura  EtapaAtual InicioEtapa     Status
+Bloqueado             Dificuldade   ProximaAcao
+SLADias (Número)      DiasNaEtapa (Número)
+DiasAtraso (Calculado)  ConsumoSLA (Calculado)  Situacao (Calculado)
+```
+
+> **A coluna do número do chamado chama-se `Title`, não `Chamado`.** Foi a
+> importação do Excel que mapeou a primeira coluna para o Título. Em fórmulas,
+> JSON e fluxos, use `Title`.
+
+---
+
+## O que falta — em ordem
+
+### 1. Preencher SLADias e DiasNaEtapa
+
+O arquivo `colar_SLADias_DiasNaEtapa.xlsx` traz os 78 valores **na mesma ordem
+da lista** (ordem de importação = ordem do ID).
+
+- Abra `MP_Projetos` em **Editar no modo de exibição de grade**
+- Garanta que a exibição está na ordem padrão, **sem classificação aplicada**
+- Cole **somente as colunas B e C** do arquivo, na primeira célula de `SLADias`
+- A coluna A do arquivo é só para conferência de alinhamento
+
+**Conferência obrigatória depois de colar.** Se qualquer uma falhar, desfaça:
+
+| Title | SLADias | DiasNaEtapa |
+|---|---|---|
+| 440641 | 5 | 8 |
+| 123 | 5 | 156 |
+| N/A01 | 3 | 3 |
+| 461634 | 7 | 2 |
+
+Resultado esperado na coluna `Situacao`, somando 78:
+
+```
+NO PRAZO    27      CONCLUÍDO   24
+ATRASADO    24      EM RISCO     3
+```
+
+### 2. Aplicar a formatação JSON
+
+Coluna → **Configurações de coluna → Formatar esta coluna → Modo avançado**.
+
+| Arquivo | Lista | Coluna |
+|---|---|---|
+| `coluna_Situacao.json` | MP_Projetos | Situacao |
+| `coluna_PrazoDaEtapa.json` | MP_Projetos | DiasNaEtapa |
+| `coluna_DiasAtraso.json` | MP_Projetos | DiasAtraso |
+| `exibicao_Projetos.json` | MP_Projetos | a exibição (Formatar exibição atual) |
+| `coluna_SituacaoFisica.json` | MP_Entregas | SituacaoFisica |
+| `coluna_TipoItem.json` | MP_Produtos | TipoItem — **já aplicado** |
+
+### 3. Criar as três listas que faltam
+
+Nesta ordem. Importar de `1_listas/MP_*.xlsx` via **+ Novo → Lista → Do Excel**.
+
+**`MP_Itens`** — 21 itens, 19 colunas. Cuidado com os tipos:
+
+```
+TEXTO   IDItem  Chamado  CodigoProduto  NumRequisicao  NumSC  NumOC
+        Comprador  Fornecedor
+NÚMERO  QtdPrevista  QtdRequisitada  QtdComprada  QtdLiberada
+        QtdInstalada  IPsDisponibilizados  QtdVMS
+DATA    DataRequisicao  EnvioSuprimentos  DataOC  PrevisaoEntrega
+```
+
+Depois acrescente à mão: `QtdRecebida` (Número, vazia — o Fluxo B preenche).
+
+**`MP_Entregas`** — 12 itens.
+
+```
+TEXTO   NF  IDItem  UnidadeRecebedora  LocalCustodia  SituacaoFisica  Observacao
+NÚMERO  QtdRecebida
+DATA    DataRecebimento
+```
+
+**`MP_HistoricoEtapas`** — 56 itens.
+
+```
+TEXTO   Chamado  Etapa
+DATA    DataInicio  DataConclusao
+```
+
+> **Códigos são TEXTO, nunca Número.** NF, SC, OC, requisição, código de
+> produto e código de objeto são identificadores. Como número perdem zero à
+> esquerda e ganham separador de milhar: 2.586.441.
+
+### 4. Fluxo A — mantém os prazos atualizados
+
+Em `make.powerautomate.com` → Criar → **Fluxo de nuvem agendado**, diário 06:00.
+Nome: `MP - Atualiza prazos`.
+
+1. **Obter itens** → `MP_Projetos`, opções avançadas, consulta de filtro:
+   `Status ne 'CONCLUÍDO' and Status ne 'CANCELADO'` — renomear para `Obter projetos`
+2. **Obter itens** → `MP_EtapasSLA`, sem filtro — renomear para `Obter etapas`
+3. **Aplicar a cada** sobre o `value` de `Obter projetos`, contendo:
+   - **Filtrar matriz** — de: `value` de `Obter etapas`;
+     condição: expressão `item()?['Title']` **é igual a** o campo dinâmico
+     `EtapaAtual`. Renomear para `Achar etapa`
+   - **Atualizar item** → `MP_Projetos`
+     - `Id` = campo dinâmico `ID`
+     - `Title` = campo dinâmico `Title` ← **obrigatório, ver aviso abaixo**
+     - `SLADias` =
+       `if(empty(body('Achar_etapa')),0,int(first(body('Achar_etapa'))?['SLADias']))`
+     - `DiasNaEtapa` =
+       `if(empty(item()?['InicioEtapa']),0,div(sub(ticks(utcNow()),ticks(item()?['InicioEtapa'])),864000000000))`
+
+> **PERIGO.** Se o campo `Title` do "Atualizar item" ficar vazio, o fluxo
+> **apaga o número do chamado dos 54 projetos ativos**. Confira antes de rodar.
+> O `Title` é obrigatório no SharePoint; os demais campos podem ficar em branco
+> sem apagar nada.
+
+### 5. Fluxo B — soma as entregas no item
+
+Gatilho: **Quando um item for criado ou modificado** em `MP_Entregas`.
+Nome: `MP - Atualiza recebido`.
+
+1. **Obter itens** → `MP_Entregas`, filtro: `IDItem eq '<IDItem do gatilho>'`
+2. **Obter itens** → `MP_Itens`, filtro: `IDItem eq '<IDItem do gatilho>'`
+3. **Aplicar a cada** sobre o resultado de `MP_Itens` → **Atualizar item**
+   - `Title` = o Title existente do item
+   - `QtdRecebida` = soma de `QtdRecebida` do passo 1
+
+Use uma variável inicializada antes do laço para somar. Cuidado com o
+**loop infinito**: este fluxo altera `MP_Itens`, não `MP_Entregas`, então não
+dispara a si mesmo. Se algum dia mudar o gatilho para `MP_Itens`, ele vira loop.
+
+Exclusão de entrega **não dispara** este gatilho. Ou crie um segundo fluxo com
+"Quando um item for excluído", ou combine com o usuário marcar como cancelada
+em vez de excluir.
+
+### 6. Exibições
+
+Em `MP_Projetos`:
+
+| Nome | Filtro |
+|---|---|
+| Carteira ativa | `Status` diferente de CONCLUÍDO e CANCELADO, agrupada por `Unidade` |
+| Atrasados | `DiasAtraso` maior que 0, ordem decrescente |
+| Bloqueados | `Bloqueado` igual a Sim |
+| Por etapa | ativos, agrupada por `EtapaAtual` |
+
+Em `MP_Entregas`: **A conferir** — `SituacaoFisica` diferente de CONFERIDO.
+Em `MP_Itens`: **Aguardando entrega** — `QtdRecebida` menor que `QtdComprada`.
+
+### 7. Índices
+
+Em Configurações da lista → Colunas indexadas, indexe em `MP_Projetos`:
+`Unidade`, `Status`, `Title`. Acima de 5.000 itens, exibição filtrada por
+coluna não indexada para de abrir.
+
+---
+
+## Armadilhas do SharePoint que já custaram tempo
+
+**Coluna calculada não recalcula com o tempo.** Um cálculo com `HOJE()` só é
+refeito quando alguém edita o item. É por isso que `DiasNaEtapa` é um número
+comum atualizado por fluxo, e não uma fórmula.
+
+**Coluna calculada não lê coluna de pesquisa.** Por isso `SLADias` vive em
+`MP_Projetos` como número, copiado da etapa pelo fluxo.
+
+**O tipo Calculado não aparece no painel moderno de criar coluna.** Use
+⚙ → Configurações da lista → Criar coluna. Marque "Adicionar à exibição padrão"
+no rodapé, senão a coluna existe mas não aparece.
+
+**As fórmulas deste site são em português com ponto e vírgula.** `SE`, não `IF`.
+
+---
+
+## Fórmulas das colunas calculadas, para referência
+
+`DiasAtraso` — retorno Número:
+
+```
+=SE([SLADias]>0;MÁXIMO([DiasNaEtapa]-[SLADias];0);0)
+```
+
+`ConsumoSLA` — retorno Número, 2 casas:
+
+```
+=SE([SLADias]>0;[DiasNaEtapa]/[SLADias];0)
+```
+
+`Situacao` — retorno Linha única de texto:
+
+```
+=SE([Status]="CONCLUÍDO";"CONCLUÍDO";SE([Status]="CANCELADO";"CANCELADO";SE([Bloqueado]="Não";SE([SLADias]=0;"SEM SLA";SE([DiasNaEtapa]>[SLADias];"ATRASADO";SE([DiasNaEtapa]*10>=[SLADias]*9;"EM RISCO";SE([DiasNaEtapa]*10>=[SLADias]*7;"ATENÇÃO";"NO PRAZO"))));"BLOQUEADO")))
+```
+
+Todas as três já existem em `MP_Projetos`. Ficam aqui caso precise recriar.
