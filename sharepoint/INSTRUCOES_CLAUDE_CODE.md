@@ -162,6 +162,29 @@ Coluna → **Configurações de coluna → Formatar esta coluna → Modo avança
 
 Nesta ordem. Importar de `1_listas/MP_*.xlsx` via **+ Novo → Lista → Do Excel**.
 
+**Quem vai na coluna Title.** O SharePoint sempre cria a coluna Title e ela é
+obrigatória. A regra aqui: **Title guarda o que uma pessoa fala em voz alta
+para identificar a linha**, e não se duplica esse valor numa segunda coluna.
+Title não precisa ser único — nunca precisou.
+
+| Lista | Title recebe | Não crie coluna separada para | Filtro de fluxo usa |
+|---|---|---|---|
+| `MP_Itens` | `IDItem` | IDItem | `Title eq '...'` |
+| `MP_Entregas` | `NF` | — | `IDItem eq '...'` |
+| `MP_HistoricoEtapas` | `Chamado` | Chamado | `Title eq '...'` |
+
+Em `MP_Entregas` o Title é a NF porque é assim que a pessoa se refere à linha,
+mas a NF **não** é a chave estrangeira — quem liga a entrega ao item é
+`IDItem`, que existe como coluna própria.
+
+> **`IDItem` REPETE em `MP_Entregas`, por projeto.** Um item pode receber
+> entrega parcial: metade numa nota, o resto em outra. Nos 12 dados atuais
+> nenhum se repete, mas isso é acaso, não regra — a fórmula original somava
+> justamente por isso. Nunca imponha unicidade nessa coluna.
+>
+> A NF também repete: a 8343 aparece em duas linhas, para itens diferentes.
+> Uma nota cobre vários itens.
+
 **`MP_Itens`** — 21 itens, 19 colunas. Cuidado com os tipos:
 
 ```
@@ -224,7 +247,9 @@ Gatilho: **Quando um item for criado ou modificado** em `MP_Entregas`.
 Nome: `MP - Atualiza recebido`.
 
 1. **Obter itens** → `MP_Entregas`, filtro: `IDItem eq '<IDItem do gatilho>'`
-2. **Obter itens** → `MP_Itens`, filtro: `IDItem eq '<IDItem do gatilho>'`
+   — devolve **todas** as entregas daquele item, que é o ponto: a soma
+2. **Obter itens** → `MP_Itens`, filtro: `Title eq '<IDItem do gatilho>'`
+   — em `MP_Itens` o IDItem mora no Title
 3. **Aplicar a cada** sobre o resultado de `MP_Itens` → **Atualizar item**
    - `Title` = o Title existente do item
    - `QtdRecebida` = soma de `QtdRecebida` do passo 1
