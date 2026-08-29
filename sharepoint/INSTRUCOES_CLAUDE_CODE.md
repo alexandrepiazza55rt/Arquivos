@@ -347,6 +347,16 @@ Em `MP_Projetos`:
 Em `MP_Entregas`: **A conferir** — `SituacaoFisica` diferente de CONFERIDO.
 Em `MP_Itens`: **Aguardando entrega** — `QtdRecebida` menor que `QtdComprada`.
 
+> **Pelo navegador ou por REST, o nome muda.** No editor de exibição do
+> SharePoint você escolhe a coluna pelo rótulo, e `Unidade`, `Status`,
+> `Bloqueado` e `EtapaAtual` aparecem assim mesmo. Se em vez disso você
+> montar o CAML ou o `ViewFields` por REST, essas quatro voltam a ser
+> `field_2`, `field_9`, `field_10` e `field_7` — são colunas que vieram da
+> importação do Excel. As criadas à mão (`SLADias`, `DiasNaEtapa`,
+> `DiasAtraso`, `ConsumoSLA`, `Situacao`) usam o próprio nome nos dois
+> caminhos. Prefira o editor: exibição não grava dado, e o navegador
+> resolve o nome sozinho.
+
 ### 7. Índices
 
 Em Configurações da lista → Colunas indexadas, indexe em `MP_Projetos`:
