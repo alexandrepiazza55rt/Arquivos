@@ -266,6 +266,18 @@ Nome: `MP - Atualiza prazos`.
 > SLADias. `SLADias` e `DiasNaEtapa` em `MP_Projetos` foram criadas à mão e
 > têm nome limpo.
 
+> **LIGAR UM FLUXO JÁ É GRAVAR.** Ligar um fluxo de recorrência no Power
+> Automate dispara uma execução na hora, além de armar o agendamento. Não
+> existe "ligar para depois testar".
+>
+> Por isso, ao criar qualquer fluxo que grava: **restrinja o filtro a um item
+> antes de ligar pela primeira vez.** No Fluxo A isso evitou que o start
+> escrevesse nos 54 antes de qualquer conferência.
+>
+> Descoberto na prática ao ligar o Fluxo A: o histórico registrou duas
+> execuções, a do start e a manual. Sem dano, porque o MERGE é idempotente —
+> as duas gravaram o mesmo valor no mesmo item.
+
 ### 5. Fluxo B — soma as entregas no item
 
 Gatilho: **Quando um item for criado ou modificado** em `MP_Entregas`.
@@ -286,6 +298,11 @@ dispara a si mesmo. Se algum dia mudar o gatilho para `MP_Itens`, ele vira loop.
 Exclusão de entrega **não dispara** este gatilho. Ou crie um segundo fluxo com
 "Quando um item for excluído", ou combine com o usuário marcar como cancelada
 em vez de excluir.
+
+> **Sinal de saúde do Fluxo A.** A distribuição de Situacao **não** serve de
+> conferência recorrente: ela muda todo dia, porque projeto atrasa sozinho com
+> o passar do tempo. O que serve é isto: **o chamado 123 sobe exatamente +1 em
+> DiasNaEtapa por dia.** Se um dia não subir, o fluxo parou de rodar.
 
 ### 6. Exibições
 
