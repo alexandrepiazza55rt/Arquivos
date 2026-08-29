@@ -17,17 +17,29 @@ contém tudo que é preciso saber: não há conversa anterior a recuperar.
 O usuário **não vai fornecer credenciais**. Ele vai abrir uma janela já
 autenticada e autorizar você a controlá-la, sob supervisão dele.
 
-Peça a ele para fechar o Edge por completo e reabrir assim:
+O navegador é o **Google Chrome**.
+
+Versões recentes do Chrome **ignoram `--remote-debugging-port` quando o perfil
+padrão está em uso** — é uma proteção deliberada. Por isso é obrigatório abrir
+com um diretório de perfil separado. Peça ao usuário para fechar o Chrome por
+completo e reabrir assim:
 
 ```powershell
-# Edge
-Start-Process msedge -ArgumentList '--remote-debugging-port=9222'
+Start-Process chrome -ArgumentList '--remote-debugging-port=9222','--user-data-dir=C:\temp\chrome-claude'
 ```
 
-```powershell
-# Chrome, se preferir
-Start-Process chrome -ArgumentList '--remote-debugging-port=9222'
+Se o PowerShell reclamar, o equivalente pelo Prompt de Comando:
+
 ```
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\temp\chrome-claude"
+```
+
+Essa janela abre com um perfil limpo, **sem login**. O usuário faz o login da
+empresa nela, com as próprias mãos — você não pede, não vê e não guarda nada
+disso. O perfil persiste em `C:\temp\chrome-claude`, então nas próximas vezes
+basta repetir o comando e a sessão continua ativa.
+
+Confirme com ele que a janela está autenticada no site antes de prosseguir.
 
 Depois conecte-se à instância existente, sem abrir navegador novo:
 

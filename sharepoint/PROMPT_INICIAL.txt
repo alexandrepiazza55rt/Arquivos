@@ -6,11 +6,16 @@ Antes de colar:
 
  1. Descompacte a pasta Monitoramento_SharePoint em algum lugar
  2. Abra o terminal DENTRO dessa pasta e rode:  claude
- 3. Feche o Edge por completo e reabra pelo PowerShell:
+ 3. Feche o Google Chrome por completo e reabra pelo PowerShell:
 
-      Start-Process msedge -ArgumentList '--remote-debugging-port=9222'
+      Start-Process chrome -ArgumentList '--remote-debugging-port=9222','--user-data-dir=C:\temp\chrome-claude'
 
- 4. Nessa janela, entre no site e confirme que está logado
+    O perfil separado é obrigatório: o Chrome novo ignora a porta de
+    depuração quando o perfil padrão está em uso.
+
+ 4. Essa janela abre SEM login. Entre no site e faça o login você mesmo.
+    O perfil fica salvo, então isso é só na primeira vez.
+
  5. Cole o texto abaixo
 
 
@@ -20,8 +25,8 @@ Leia o arquivo INSTRUCOES_CLAUDE_CODE.md desta pasta. Ele tem todo o contexto
 do projeto: o que já foi feito no SharePoint, o que falta, as fórmulas, os
 JSON de formatação e as armadilhas já mapeadas.
 
-Eu abri o Edge com a porta de depuração 9222 e já estou autenticado no site
-da empresa. Conecte-se a essa janela existente com
+Eu abri o Google Chrome com a porta de depuração 9222, num perfil separado em
+C:\temp\chrome-claude, e já fiz o login no site da empresa nessa janela. Conecte-se a essa janela existente com
 chromium.connectOverCDP('http://localhost:9222') — não abra navegador novo e
 não me peça credencial nenhuma.
 
