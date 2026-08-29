@@ -63,14 +63,33 @@ Regras ao operar essa janela:
 
 ## Estado atual
 
-Já existe, feito à mão:
+Itens 1 a 7 concluídos. As sete listas estão populadas, os cinco JSON
+aplicados, os dois fluxos ligados, cinco exibições criadas e três índices
+aplicados em `MP_Projetos`.
 
 | Lista | Itens | Situação |
 |---|---|---|
 | `MP_Produtos` | 26 | pronta, com badge JSON em TipoItem |
 | `MP_ObjetosCusto` | 108 | pronta |
 | `MP_EtapasSLA` | 12 | pronta |
-| `MP_Projetos` | 78 | dados importados, colunas criadas, **valores vazios** |
+| `MP_Projetos` | 78 | completa — SLADias, DiasNaEtapa e Situacao preenchidos |
+| `MP_Itens` | 21 | completa — QtdRecebida carregada, soma 38 |
+| `MP_Entregas` | 12 | completa |
+| `MP_HistoricoEtapas` | 56 | completa |
+
+**Distribuição de `Situacao` depois do Fluxo A rodar** (referência 28/08/2026):
+
+```
+ATRASADO   27      CONCLUÍDO  24
+NO PRAZO   26      ATENÇÃO     1
+```
+
+> Os 27 ATRASADO são metade da carteira ativa (54). Não é defeito do cálculo:
+> `DiasNaEtapa` vem da data real de `InicioEtapa` de cada projeto. Ou os SLA
+> por etapa estão apertados demais para a realidade do setor, ou o setor está
+> mesmo atrás. A resposta a isso é do dono do processo, não do sistema — mas
+> ela precisa vir antes de o setor entrar, senão a coluna vira ruído e todo
+> mundo aprende a ignorar o vermelho.
 
 Colunas já criadas em `MP_Projetos`:
 
@@ -333,19 +352,64 @@ dispara a si mesmo. Se algum dia mudar o gatilho para `MP_Itens`, ele vira loop.
 > Essa carga também serve de faxina: se o teste do Fluxo B deixar resíduo,
 > ela sobrescreve com o valor verdadeiro.
 
-### 6. Exibições
+> **Verificação que se compara com a própria suposição não prova nada.**
+> Aconteceu quatro vezes neste projeto, sempre passando no teste:
+>
+> 1. A data gravada em `00:00:00Z` foi conferida por REST contra o próprio
+>    valor gravado. Só a tela mostrou o dia anterior.
+> 2. A condição de gatilho com `splitOn` seria avaliada antes da divisão do
+>    lote, seria sempre falsa, e o teste passaria sem nada ter acontecido.
+> 3. `0 or -1` em Python fez os nove zeros legítimos parecerem divergência.
+>    O dado estava certo; o teste é que estava errado.
+> 4. Quatro exibições foram relatadas como criadas lendo o retorno do próprio
+>    `evaluate`, quando nenhuma existia — o botão OK procurado por
+>    `name="BtnOK"` não existe naquela página.
+>
+> A regra: compare sempre com algo de fora do seu próprio caminho — a tela, o
+> dado de origem, ou um número que o usuário já conhece de cor.
+
+### 6. Exibições — feito, menos uma
 
 Em `MP_Projetos`:
 
-| Nome | Filtro |
-|---|---|
-| Carteira ativa | `Status` diferente de CONCLUÍDO e CANCELADO, agrupada por `Unidade` |
-| Atrasados | `DiasAtraso` maior que 0, ordem decrescente |
-| Bloqueados | `Bloqueado` igual a Sim |
-| Por etapa | ativos, agrupada por `EtapaAtual` |
+| Nome | Filtro | Linhas |
+|---|---|---|
+| Carteira ativa | `Status` diferente de CONCLUÍDO e CANCELADO, agrupada por `Unidade` | 54 |
+| Atrasados | `DiasAtraso` maior que 0 **e** `Status` diferente de CONCLUÍDO e CANCELADO, ordem decrescente | 27 |
+| Bloqueados | `Bloqueado` igual a Sim | — |
+| Por etapa | ativos, agrupada por `EtapaAtual` | 54 |
 
 Em `MP_Entregas`: **A conferir** — `SituacaoFisica` diferente de CONFERIDO.
-Em `MP_Itens`: **Aguardando entrega** — `QtdRecebida` menor que `QtdComprada`.
+
+> **Por que "Atrasados" precisa do filtro de Status.** Só `DiasAtraso > 0`
+> devolve 50 linhas: 27 ativos atrasados e 23 já concluídos que estouraram o
+> prazo em algum momento do passado. Os 23 são história, não fila de trabalho
+> — e uma exibição de triagem que mistura as duas coisas deixa de ser
+> varrível. O atraso dos concluídos continua guardado no item; o que muda é
+> só quem aparece nesta exibição.
+
+**`MP_Itens` → Aguardando entrega — pendente.** O filtro de exibição do
+SharePoint compara coluna com valor literal, nunca coluna com coluna; o CAML
+também não faz. Então `QtdRecebida < QtdComprada` não existe como filtro.
+
+A saída é uma coluna calculada em `MP_Itens`:
+
+```
+Pendente = [QtdComprada] - [QtdRecebida]
+```
+
+e a exibição filtra `Pendente` maior que 0 — hoje, 9 linhas.
+
+> **Aqui coluna calculada pode.** A regra "coluna calculada não recalcula com
+> o tempo" não morde neste caso: `Pendente` não depende de `HOJE()`, depende
+> de duas colunas do próprio item. Toda vez que o Fluxo B grava `QtdRecebida`
+> por MERGE, o SharePoint recalcula `Pendente` na mesma escrita. É o oposto
+> exato de `DiasNaEtapa`, que precisou virar fluxo justamente por depender da
+> data de hoje.
+
+### 7. Índices — feito
+
+Aplicados em `MP_Projetos`: `Unidade`, `Status`, `Title`.
 
 > **Pelo navegador ou por REST, o nome muda.** No editor de exibição do
 > SharePoint você escolhe a coluna pelo rótulo, e `Unidade`, `Status`,
@@ -357,11 +421,8 @@ Em `MP_Itens`: **Aguardando entrega** — `QtdRecebida` menor que `QtdComprada`.
 > caminhos. Prefira o editor: exibição não grava dado, e o navegador
 > resolve o nome sozinho.
 
-### 7. Índices
-
-Em Configurações da lista → Colunas indexadas, indexe em `MP_Projetos`:
-`Unidade`, `Status`, `Title`. Acima de 5.000 itens, exibição filtrada por
-coluna não indexada para de abrir.
+> Acima de 5.000 itens, exibição filtrada por coluna não indexada para de
+> abrir. Com 78 itens não muda nada hoje; muda quando mudar.
 
 ---
 
