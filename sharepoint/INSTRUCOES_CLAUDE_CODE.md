@@ -148,9 +148,15 @@ Coluna → **Configurações de coluna → Formatar esta coluna → Modo avança
 | `coluna_Situacao.json` | MP_Projetos | Situacao |
 | `coluna_PrazoDaEtapa.json` | MP_Projetos | DiasNaEtapa |
 | `coluna_DiasAtraso.json` | MP_Projetos | DiasAtraso |
-| `exibicao_Projetos.json` | MP_Projetos | a exibição (Formatar exibição atual) |
+| `exibicao_Projetos.json` | MP_Projetos | a exibição (Formatar exibição atual) — v2, ver nota |
 | `coluna_SituacaoFisica.json` | MP_Entregas | SituacaoFisica |
 | `coluna_TipoItem.json` | MP_Produtos | TipoItem — **já aplicado** |
+
+> **Realce de linha, versão 2.** A primeira versão pintava também ATRASADO, e
+> o rosa da linha engolia o rosa da pílula. Além disso ATRASADO são 24 de 78
+> hoje: realçar um terço da lista não ajuda a varrer, vira ruído. A v2 realça
+> só BLOQUEADO (vermelho) e EM RISCO (laranja) — o que é raro e exige ação.
+> ATRASADO continua sinalizado pelo badge, sobre linha branca.
 
 ### 3. Criar as três listas que faltam
 
