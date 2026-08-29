@@ -228,18 +228,37 @@ Nome: `MP - Atualiza prazos`.
    - **Filtrar matriz** — de: `value` de `Obter etapas`;
      condição: expressão `item()?['Title']` **é igual a** o campo dinâmico
      `EtapaAtual`. Renomear para `Achar etapa`
-   - **Atualizar item** → `MP_Projetos`
-     - `Id` = campo dinâmico `ID`
-     - `Title` = campo dinâmico `Title` ← **obrigatório, ver aviso abaixo**
+   - **Enviar uma solicitação HTTP para o SharePoint** — *não* use a ação
+     "Atualizar item"
+     - Método: `POST`
+     - Uri: `_api/web/lists/getbytitle('MP_Projetos')/items(<ID do item>)`
+     - Cabeçalhos:
+       ```
+       X-HTTP-Method: MERGE
+       IF-MATCH: *
+       Content-Type: application/json;odata=nometadata
+       Accept: application/json;odata=nometadata
+       ```
+     - Corpo:
+       ```json
+       {"SLADias": <expressão>, "DiasNaEtapa": <expressão>}
+       ```
      - `SLADias` =
-       `if(empty(body('Achar_etapa')),0,int(first(body('Achar_etapa'))?['SLADias']))`
+       `if(empty(body('Achar_etapa')),0,int(first(body('Achar_etapa'))?['field_2']))`
      - `DiasNaEtapa` =
-       `if(empty(item()?['InicioEtapa']),0,div(sub(ticks(utcNow()),ticks(item()?['InicioEtapa'])),864000000000))`
+       `if(empty(item()?['field_8']),0,div(sub(ticks(utcNow()),ticks(item()?['field_8'])),864000000000))`
 
-> **PERIGO.** Se o campo `Title` do "Atualizar item" ficar vazio, o fluxo
-> **apaga o número do chamado dos 54 projetos ativos**. Confira antes de rodar.
-> O `Title` é obrigatório no SharePoint; os demais campos podem ficar em branco
-> sem apagar nada.
+> **Por que não a ação "Atualizar item".** Ela monta um PATCH com todos os
+> campos do cartão, e campo deixado em branco pode ser gravado como vazio —
+> é assim que se apaga o número do chamado dos 54 ativos sem perceber. O MERGE
+> por HTTP envia **exatamente** os dois campos nomeados no corpo e não tem como
+> tocar em mais nada. É o mesmo mecanismo que carregou os 78 valores iniciais
+> sem um único incidente.
+>
+> Nomes internos no corpo e nas expressões: `MP_Projetos` usa `field_8` para
+> InicioEtapa e `field_9` para Status; `MP_EtapasSLA` usa `field_2` para
+> SLADias. `SLADias` e `DiasNaEtapa` em `MP_Projetos` foram criadas à mão e
+> têm nome limpo.
 
 ### 5. Fluxo B — soma as entregas no item
 
